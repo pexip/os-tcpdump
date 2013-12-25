@@ -1,3 +1,9 @@
+tcpdump (4.2.1-1ubuntu2pexip1) pexip; urgency=low
+
+  * Prepare Pexip packaging
+
+ -- John-Mark Bell <jmb@pexip.com>  Wed, 25 Dec 2013 04:52:07 +0000
+
 tcpdump (4.2.1-1ubuntu2) precise; urgency=low
 
   * debian/control: Build-Depends on dh-apparmor (LP: #948095)
