@@ -6,3 +6,6 @@
 50_hurd.diff
 50_autotools-dev.diff
 90_man_apparmor.diff
+CVE-2014-8767.patch
+CVE-2014-8769.patch
+CVE-2014-9140.patch

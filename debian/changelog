@@ -1,3 +1,23 @@
+tcpdump (4.2.1-1ubuntu2.1) precise-security; urgency=medium
+
+  * SECURITY UPDATE: denial of service and possible code execution in
+    olsr_print
+    - debian/patches/CVE-2014-8767.patch: improve bounds checking and
+      error handling in print-olsr.c.
+    - CVE-2014-8767
+  * SECURITY UPDATE: denial of service and possible code execution in
+    print-aodv.c
+    - debian/patches/CVE-2014-8769.patch: improve bounds checking and
+      length checking in print-aodv.c, aodv.h.
+    - CVE-2014-8769
+  * SECURITY UPDATE: denial of service and possible code execution in
+    print-ppp.c
+    - debian/patches/CVE-2014-9140.patch: improve bounds checking in
+      print-ppp.c.
+    - CVE-2014-9140
+
+ -- Marc Deslauriers <marc.deslauriers@ubuntu.com>  Wed, 03 Dec 2014 17:05:38 -0500
+
 tcpdump (4.2.1-1ubuntu2) precise; urgency=low
 
   * debian/control: Build-Depends on dh-apparmor (LP: #948095)
