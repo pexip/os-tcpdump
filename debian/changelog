@@ -1,3 +1,28 @@
+tcpdump (4.2.1-1ubuntu2.1pexip2) pexip; urgency=low
+
+  * SECURITY UPDATE: denial of service and possible code execution in
+    print-mobility.c
+    - debian/patches/CVE-2015-0261.patch: improve bounds checking
+      in print-mobility.c.
+    - CVE-2015-0261
+  * SECURITY UPDATE: denial of service and possible code execution in
+    print-rpki-rtr.c
+    - debian/patches/CVE-2015-2153.patch: improve bounds checking
+      in print-rpki-rtr.c
+    - CVE-2015-2153
+  * SECURITY UPDATE: denial of service and possible code execution in
+    osi_print_cksum
+    - debian/patches/CVE-2015-2154.patch: improve bounds checking
+      in print-isoclns.c
+    - CVE-2015-2154
+  * SECURITY UPDATE: denial of service and possible code execution in
+    print-forces.c
+    - debian/patches/CVE-2015-2155.patch: improve bounds checking
+      in print-forces.c
+    - CVE-2015-2155
+
+ -- John-Mark Bell <jmb@pexip.com>  Thu, 19 Mar 2015 20:51:32 +0000
+
 tcpdump (4.2.1-1ubuntu2.1pexip1) pexip; urgency=low
 
   * New upstream release
