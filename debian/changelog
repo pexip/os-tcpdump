@@ -1,3 +1,30 @@
+tcpdump (4.2.1-1ubuntu2.2pexip1) pexip; urgency=low
+
+  * New upstream release
+
+ -- John-Mark Bell <jmb@pexip.com>  Tue, 26 May 2015 15:46:25 +0100
+
+tcpdump (4.2.1-1ubuntu2.2) precise-security; urgency=medium
+
+  * SECURITY UPDATE: denial of service and possible code execution via
+    multiple issues (LP: #1444363)
+    - debian/patches/60_cve-2015-0261.diff: check lengths in
+      print-mobility.c.
+    - debian/patches/60_cve-2015-2153.diff: check length in
+      print-rpki-rtr.c.
+    - debian/patches/60_cve-2015-2153-fix-regression.diff: more length
+      checks in print-rpki-rtr.c.
+    - debian/patches/60_cve-2015-2154.diff: check lengths in
+      print-isoclns.c.
+    - debian/patches/60_cve-2015-2155.diff: make sure ops->print is valid
+      in print-forces.c.
+    - CVE-2015-0261
+    - CVE-2015-2153
+    - CVE-2015-2154
+    - CVE-2015-2155
+
+ -- Marc Deslauriers <marc.deslauriers@ubuntu.com>  Fri, 24 Apr 2015 15:15:57 -0400
+
 tcpdump (4.2.1-1ubuntu2.1pexip2) pexip; urgency=low
 
   * SECURITY UPDATE: denial of service and possible code execution in

@@ -9,7 +9,8 @@
 CVE-2014-8767.patch
 CVE-2014-8769.patch
 CVE-2014-9140.patch
-CVE-2015-0261.patch
-CVE-2015-2153.patch
-CVE-2015-2154.patch
-CVE-2015-2155.patch
+60_cve-2015-0261.diff
+60_cve-2015-2153.diff
+60_cve-2015-2153-fix-regression.diff
+60_cve-2015-2154.diff
+60_cve-2015-2155.diff
