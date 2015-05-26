@@ -1,6 +1,8 @@
 tcpdump (4.2.1-1ubuntu2.2pexip1) pexip; urgency=low
 
   * New upstream release
+  * debian/patches/CVE-2015-{0261,2153,2154,2155}.patch: drop,
+    merged upstream.
 
  -- John-Mark Bell <jmb@pexip.com>  Tue, 26 May 2015 15:46:25 +0100
 
