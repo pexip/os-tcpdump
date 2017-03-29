@@ -15,7 +15,7 @@ Standards-Version: 3.9.2
 Homepage: http://www.tcpdump.org/
 Vcs-Browser: http://git.debian.org/?p=users/rfrancoise/tcpdump.git
 Vcs-Git: git://git.debian.org/git/users/rfrancoise/tcpdump.git
-XS-Pexip-Upstream: http://archive.ubuntu.com/ubuntu/ precise
+XS-Pexip-Upstream: http://ftp.debian.org/debian/ jessie
 
 Package: tcpdump
 Architecture: any
