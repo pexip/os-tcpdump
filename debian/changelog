@@ -1,108 +1,237 @@
-tcpdump (4.2.1-1ubuntu2.2pexip2) pexip; urgency=low
+tcpdump (4.9.0-1~deb8u1pexip1) pexip; urgency=low
 
-  * Rebuild against libssl1.0.2
+  * Migrate to Jessie
 
- -- John-Mark Bell <jmb@pexip.com>  Tue, 11 Oct 2016 22:24:38 +0100
+ -- John-Mark Bell <jmb@pexip.com>  Wed, 29 Mar 2017 23:14:59 +0100
 
-tcpdump (4.2.1-1ubuntu2.2pexip1) pexip; urgency=low
+tcpdump (4.9.0-1~deb8u1) jessie-security; urgency=high
 
-  * New upstream release
-  * debian/patches/CVE-2015-{0261,2153,2154,2155}.patch: drop,
-    merged upstream.
+  * Backport to jessie:
+    + Re-enable crypto support.
+    + Disable tests that require newer libpcap features: Geneve (1.7) and
+      file format version checks (1.8), and relax B-D on libpcap0.8-dev.
 
- -- John-Mark Bell <jmb@pexip.com>  Tue, 26 May 2015 15:46:25 +0100
+ -- Romain Francoise <rfrancoise@debian.org>  Sat, 28 Jan 2017 17:11:07 +0100
 
-tcpdump (4.2.1-1ubuntu2.2) precise-security; urgency=medium
+tcpdump (4.9.0-1) unstable; urgency=high
 
-  * SECURITY UPDATE: denial of service and possible code execution via
-    multiple issues (LP: #1444363)
-    - debian/patches/60_cve-2015-0261.diff: check lengths in
-      print-mobility.c.
-    - debian/patches/60_cve-2015-2153.diff: check length in
-      print-rpki-rtr.c.
-    - debian/patches/60_cve-2015-2153-fix-regression.diff: more length
-      checks in print-rpki-rtr.c.
-    - debian/patches/60_cve-2015-2154.diff: check lengths in
-      print-isoclns.c.
-    - debian/patches/60_cve-2015-2155.diff: make sure ops->print is valid
-      in print-forces.c.
-    - CVE-2015-0261
-    - CVE-2015-2153
-    - CVE-2015-2154
-    - CVE-2015-2155
+  * New upstream security release, fixing the following:
+    + CVE-2016-7922: buffer overflow in print-ah.c:ah_print().
+    + CVE-2016-7923: buffer overflow in print-arp.c:arp_print().
+    + CVE-2016-7924: buffer overflow in print-atm.c:oam_print().
+    + CVE-2016-7925: buffer overflow in print-sl.c:sl_if_print().
+    + CVE-2016-7926: buffer overflow in print-ether.c:ethertype_print().
+    + CVE-2016-7927: buffer overflow in print-802_11.c:ieee802_11_radio_print().
+    + CVE-2016-7928: buffer overflow in print-ipcomp.c:ipcomp_print().
+    + CVE-2016-7929: buffer overflow in print-juniper.c:juniper_parse_header().
+    + CVE-2016-7930: buffer overflow in print-llc.c:llc_print().
+    + CVE-2016-7931: buffer overflow in print-mpls.c:mpls_print().
+    + CVE-2016-7932: buffer overflow in print-pim.c:pimv2_check_checksum().
+    + CVE-2016-7933: buffer overflow in print-ppp.c:ppp_hdlc_if_print().
+    + CVE-2016-7934: buffer overflow in print-udp.c:rtcp_print().
+    + CVE-2016-7935: buffer overflow in print-udp.c:rtp_print().
+    + CVE-2016-7936: buffer overflow in print-udp.c:udp_print().
+    + CVE-2016-7937: buffer overflow in print-udp.c:vat_print().
+    + CVE-2016-7938: integer overflow in print-zeromq.c:zmtp1_print_frame().
+    + CVE-2016-7939: buffer overflow in print-gre.c, multiple functions.
+    + CVE-2016-7940: buffer overflow in print-stp.c, multiple functions.
+    + CVE-2016-7973: buffer overflow in print-atalk.c, multiple functions.
+    + CVE-2016-7974: buffer overflow in print-ip.c, multiple functions.
+    + CVE-2016-7975: buffer overflow in print-tcp.c:tcp_print().
+    + CVE-2016-7983: buffer overflow in print-bootp.c:bootp_print().
+    + CVE-2016-7984: buffer overflow in print-tftp.c:tftp_print().
+    + CVE-2016-7985: buffer overflow in print-calm-fast.c:calm_fast_print().
+    + CVE-2016-7986: buffer overflow in print-geonet.c, multiple functions.
+    + CVE-2016-7992: buffer overflow in print-cip.c:cip_if_print().
+    + CVE-2016-7993: a bug in util-print.c:relts_print() could cause a
+      buffer overflow in multiple protocol parsers (DNS, DVMRP, HSRP, IGMP,
+      lightweight resolver protocol, PIM).
+    + CVE-2016-8574: buffer overflow in print-fr.c:frf15_print().
+    + CVE-2016-8575: buffer overflow in print-fr.c:q933_print().
+    + CVE-2017-5202: buffer overflow in print-isoclns.c:clnp_print().
+    + CVE-2017-5203: buffer overflow in print-bootp.c:bootp_print().
+    + CVE-2017-5204: buffer overflow in print-ip6.c:ip6_print().
+    + CVE-2017-5205: buffer overflow in print-isakmp.c:ikev2_e_print().
+    + CVE-2017-5341: buffer overflow in print-otv.c:otv_print().
+    + CVE-2017-5342: a bug in multiple protocol parsers (Geneve, GRE, NSH,
+      OTV, VXLAN and VXLAN GPE) could cause a buffer overflow in
+      print-ether.c:ether_print().
+    + CVE-2017-5482: buffer overflow in print-fr.c:q933_print().
+    + CVE-2017-5483: buffer overflow in print-snmp.c:asn1_parse().
+    + CVE-2017-5484: buffer overflow in print-atm.c:sig_print().
+    + CVE-2017-5485: buffer overflow in addrtoname.c:lookup_nsap().
+    + CVE-2017-5486: buffer overflow in print-isoclns.c:clnp_print().
+  * Re-enable all tests and bump build-dep on libpcap0.8-dev to >= 1.8
+    accordingly.
+  * Switch Vcs-Git URL to the https one.
+  * Adjust lintian override name about dh 9.
 
- -- Marc Deslauriers <marc.deslauriers@ubuntu.com>  Fri, 24 Apr 2015 15:15:57 -0400
+ -- Romain Francoise <rfrancoise@debian.org>  Thu, 26 Jan 2017 20:04:11 +0100
 
-tcpdump (4.2.1-1ubuntu2.1pexip2) pexip; urgency=low
+tcpdump (4.8.1-2) unstable; urgency=medium
 
-  * SECURITY UPDATE: denial of service and possible code execution in
-    print-mobility.c
-    - debian/patches/CVE-2015-0261.patch: improve bounds checking
-      in print-mobility.c.
-    - CVE-2015-0261
-  * SECURITY UPDATE: denial of service and possible code execution in
-    print-rpki-rtr.c
-    - debian/patches/CVE-2015-2153.patch: improve bounds checking
-      in print-rpki-rtr.c
-    - CVE-2015-2153
-  * SECURITY UPDATE: denial of service and possible code execution in
-    osi_print_cksum
-    - debian/patches/CVE-2015-2154.patch: improve bounds checking
-      in print-isoclns.c
-    - CVE-2015-2154
-  * SECURITY UPDATE: denial of service and possible code execution in
-    print-forces.c
-    - debian/patches/CVE-2015-2155.patch: improve bounds checking
-      in print-forces.c
-    - CVE-2015-2155
+  * Disable new HNCP test, which fails on some buildds for some
+    as-of-yet unexplained reason.
 
- -- John-Mark Bell <jmb@pexip.com>  Thu, 19 Mar 2015 20:51:32 +0000
+ -- Romain Francoise <rfrancoise@debian.org>  Sat, 29 Oct 2016 19:40:01 +0200
 
-tcpdump (4.2.1-1ubuntu2.1pexip1) pexip; urgency=low
+tcpdump (4.8.1-1) unstable; urgency=medium
 
-  * New upstream release
+  * New upstream release.
+  * Re-enable Geneve tests (disabled in 4.7.4-1) and bump build-dep on
+    libpcap0.8-dev to >= 1.7 accordingly.
+  * Disable new pcap version tests which require libpcap 1.8+.
 
- -- John-Mark Bell <jmb@pexip.com>  Mon, 05 Jan 2015 14:32:16 +0000
+ -- Romain Francoise <rfrancoise@debian.org>  Sat, 29 Oct 2016 17:16:06 +0200
 
-tcpdump (4.2.1-1ubuntu2.1) precise-security; urgency=medium
+tcpdump (4.7.4-3) unstable; urgency=medium
 
-  * SECURITY UPDATE: denial of service and possible code execution in
-    olsr_print
-    - debian/patches/CVE-2014-8767.patch: improve bounds checking and
-      error handling in print-olsr.c.
-    - CVE-2014-8767
-  * SECURITY UPDATE: denial of service and possible code execution in
-    print-aodv.c
-    - debian/patches/CVE-2014-8769.patch: improve bounds checking and
-      length checking in print-aodv.c, aodv.h.
-    - CVE-2014-8769
-  * SECURITY UPDATE: denial of service and possible code execution in
-    print-ppp.c
-    - debian/patches/CVE-2014-9140.patch: improve bounds checking in
-      print-ppp.c.
-    - CVE-2014-9140
+  * Use dh-autoreconf instead of calling autoconf directly and patching
+    config.{guess,sub}.
+  * Call dh_auto_configure instead of configure in override target, patch
+    by Helmut Grohne (closes: #837951).
 
- -- Marc Deslauriers <marc.deslauriers@ubuntu.com>  Wed, 03 Dec 2014 17:05:38 -0500
+ -- Romain Francoise <rfrancoise@debian.org>  Sat, 17 Sep 2016 11:18:45 +0200
 
-tcpdump (4.2.1-1ubuntu2pexip1) pexip; urgency=low
+tcpdump (4.7.4-2) unstable; urgency=medium
 
-  * Prepare Pexip packaging
+  * Disable crypto support as it causes FTBFS with OpenSSL 1.1.x and we
+    don't have a working fix upstream yet (closes: #828569).
+  * Bump Standards-Version to 3.9.8.
+  * Use cgit URL for Vcs-Browser.
 
- -- John-Mark Bell <jmb@pexip.com>  Wed, 25 Dec 2013 04:52:07 +0000
+ -- Romain Francoise <rfrancoise@debian.org>  Sun, 28 Aug 2016 18:16:50 +0200
 
-tcpdump (4.2.1-1ubuntu2) precise; urgency=low
+tcpdump (4.7.4-1) unstable; urgency=medium
 
-  * debian/control: Build-Depends on dh-apparmor (LP: #948095)
+  * New upstream release.
+  * Disable two geneve tests that require libpcap 1.7+.
+  * Bump Standards-Version to 3.9.6.
 
- -- Jamie Strandboge <jamie@ubuntu.com>  Tue, 06 Mar 2012 09:18:56 -0600
+ -- Romain Francoise <rfrancoise@debian.org>  Sat, 23 May 2015 18:25:01 +0200
 
-tcpdump (4.2.1-1ubuntu1) precise; urgency=low
+tcpdump (4.6.2-5+deb8u1) stable; urgency=low
 
-  * Resynchronise with Debian.  Remaining changes (LP: #892285):
-    - Add enforcing AppArmor profile.
-  * Refreshed manpage patch to apply to new upstream.
+  * Cherry-pick commit 3f15ae25c2 from upstream Git to fix -Z confirmation
+    log being sent to stdout, where it can get mixed with pcap stream
+    data if '-w -' is used (closes: #793479).
 
- -- Stéphane Graber <stgraber@ubuntu.com>  Wed, 04 Jan 2012 10:33:48 +0100
+ -- Romain Francoise <rfrancoise@debian.org>  Sun, 02 Aug 2015 19:57:22 +0200
+
+tcpdump (4.6.2-5) unstable; urgency=high
+
+  * Cherry-pick commit fb6e5377f3 from upstream Git to fix regressions in the
+    RPKI/RTR printer after the CVE-2015-2153 changes. Thanks to Artur Rona
+    from Ubuntu for the heads-up (closes: #781362).
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sat, 04 Apr 2015 19:10:27 +0200
+
+tcpdump (4.6.2-4) unstable; urgency=high
+
+  * Cherry-pick changes from upstream Git to fix the following security
+    issues:
+    + CVE-2015-0261: missing bounds checks in IPv6 Mobility printer.
+    + CVE-2015-2153: missing bounds checks in RPKI/RTR printer.
+    + CVE-2015-2154: missing bounds checks in ISOCLNS printer.
+    + CVE-2015-2155: missing bounds checks in ForCES printer.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sat, 14 Mar 2015 18:43:44 +0100
+
+tcpdump (4.6.2-3) unstable; urgency=high
+
+  * Cherry-pick commit 0f95d441e4 from upstream Git to fix a buffer overflow
+    in the PPP dissector (CVE-2014-9140).
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sat, 29 Nov 2014 12:23:53 +0100
+
+tcpdump (4.6.2-2) unstable; urgency=high
+
+  * Urgency high due to security fixes.
+  * Add three patches extracted from various upstream commits fixing
+    vulnerabilities in three dissectors:
+    + CVE-2014-8767: missing bounds checks in OLSR dissector (closes: #770434).
+    + CVE-2014-8768: missing bounds checks in Geonet dissector
+      (closes: #770415).
+    + CVE-2014-8769: missing bounds checks in AOVD dissector (closes: #770424).
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sat, 22 Nov 2014 11:48:08 +0100
+
+tcpdump (4.6.2-1) unstable; urgency=medium
+
+  * New upstream release.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Thu, 04 Sep 2014 18:53:34 +0200
+
+tcpdump (4.6.1-3) unstable; urgency=medium
+
+  * Bump build-dep on libpcap0.8-dev to >= 1.5 as the pppoes_id test case
+    requires a pcap version that supports PPPoE session ID filtering.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sat, 16 Aug 2014 17:38:28 +0200
+
+tcpdump (4.6.1-2) unstable; urgency=medium
+
+  * Expand configure check for net/pfvar.h to also check for existence of
+    net/if_pflog.h to fix build on GNU/kFreeBSD, which ships the former
+    but not the latter, see #756553 (closes: #756790).
+
+ -- Romain Francoise <rfrancoise@debian.org>  Mon, 04 Aug 2014 22:37:24 +0200
+
+tcpdump (4.6.1-1) unstable; urgency=medium
+
+  * New upstream release.
+  * debian/control: Mark tcpdump 'Multi-Arch: foreign' (closes: #700727).
+
+ -- Romain Francoise <rfrancoise@debian.org>  Wed, 30 Jul 2014 19:16:49 +0200
+
+tcpdump (4.5.1-2) unstable; urgency=low
+
+  * Disable nflog-e testcase, the NFLOG header length is specified in host
+    byte order which makes capture files order-dependent (closes: #731031).
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sun, 01 Dec 2013 12:13:16 +0100
+
+tcpdump (4.5.1-1) unstable; urgency=low
+
+  * New upstream release.
+  * Disable new pppoes testcase which uses a new pcap feature to avoid tying
+    the two upstream versions together.
+  * debian/control: Set Standards-Version to 3.9.5.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sat, 30 Nov 2013 23:54:03 +0100
+
+tcpdump (4.4.0-1) unstable; urgency=low
+
+  * New upstream release:
+    + Fixes format error in NTP printer (closes: #686276).
+    + Rewords -e description (closes: #648768).
+  * debian/control: Set Standards-Version to 3.9.4.
+  * Use canonical locations in Vcs-* fields.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sat, 25 May 2013 13:50:30 +0200
+
+tcpdump (4.3.0-1) unstable; urgency=low
+
+  * New upstream release.
+  * Re-enable test suite.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Wed, 13 Jun 2012 22:55:54 +0200
+
+tcpdump (4.2.1-3) unstable; urgency=low
+
+  * Fix CPPFLAGS handling in upstream configure.in to avoid losing
+    hardening flags, patch by Simon Ruderich <simon@ruderich.org>
+    (closes: #662016).
+  * Fix some misspellings pointed out by lintian.
+  * debian/control: Set Standards-Version to 3.9.3.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sat, 03 Mar 2012 17:11:48 +0100
+
+tcpdump (4.2.1-2) unstable; urgency=low
+
+  * Drop debian/patches/50_kfreebsd.diff (closes: #658848).
+
+ -- Romain Francoise <rfrancoise@debian.org>  Mon, 06 Feb 2012 19:01:12 +0100
 
 tcpdump (4.2.1-1) unstable; urgency=low
 
@@ -134,26 +263,6 @@ tcpdump (4.2.0~rc1-1) experimental; urgency=low
 
  -- Romain Francoise <rfrancoise@debian.org>  Sun, 14 Aug 2011 10:44:58 +0200
 
-tcpdump (4.1.1-2ubuntu2) oneiric; urgency=low
-
-  * debian/usr.sbin.tcpdump:
-    - allow gzip and bzip2 (LP: #722856)
-    - allow read and write to .pcap files
-    - allow read of /var/log/snort/*log* files
-  * debian/patches/90_man_apparmor.diff: update man page to reference AppArmor
-    confinement
-
- -- Jamie Strandboge <jamie@ubuntu.com>  Wed, 22 Jun 2011 09:13:45 -0500
-
-tcpdump (4.1.1-2ubuntu1) oneiric; urgency=low
-
-  * Resynchronise with Debian.  Remaining changes:
-    - Add enforcing AppArmor profile.
-  * Remove unnecessary debian/postinst and debian/postrm files;
-    dh_installdeb will generate these itself.
-
- -- Colin Watson <cjwatson@ubuntu.com>  Thu, 26 May 2011 16:11:16 +0100
-
 tcpdump (4.1.1-2) unstable; urgency=low
 
   * Fix FTBFS on GNU/Hurd; patch from Svante Signell (closes: #622287).
@@ -161,40 +270,6 @@ tcpdump (4.1.1-2) unstable; urgency=low
     Standards-Version to 3.9.1.
 
  -- Romain Francoise <rfrancoise@debian.org>  Mon, 11 Apr 2011 22:37:29 +0200
-
-tcpdump (4.1.1-1ubuntu4) oneiric; urgency=low
-
-  * Rebuild for OpenSSL 1.0.0.
-
- -- Colin Watson <cjwatson@ubuntu.com>  Wed, 25 May 2011 22:43:20 +0100
-
-tcpdump (4.1.1-1ubuntu3) natty; urgency=low
-
-  * debian/usr.sbin.tcpdump: allow read access to /etc/ethers (LP: #660904)
-
- -- Jamie Strandboge <jamie@ubuntu.com>  Fri, 07 Jan 2011 12:56:05 -0600
-
-tcpdump (4.1.1-1ubuntu2) maverick; urgency=low
-
-  * debian/control: Build-Depends on debhelper >= 7.4.20ubuntu5
-  * debian/usr.sbin.tcpdump: include local override file
-  * debian/rules, debian/postrm, debian/postinst: use dh_apparmor
-
- -- Jamie Strandboge <jamie@ubuntu.com>  Fri, 06 Aug 2010 12:46:37 -0500
-
-tcpdump (4.1.1-1ubuntu1) maverick; urgency=low
-
-  * Merge from debian unstable.  Remaining changes:
-    - add enforcing AppArmor profile:
-      - create debian/usr.sbin.tcpdump
-      - debian/control: suggest apparmor >= 2.3
-      - create debian/postrm: remove force-complain and disable links on purge
-      - create debian/README.Debian: give information on AppArmor
-      - create debian/postinst: reload tcpdump profile
-      - create debian/install: install profile to /etc/apparmor.d
-      - create debian/tcpdump.dirs: create etc/apparmor.d/force-complain
-
- -- Jamie Strandboge <jamie@ubuntu.com>  Tue, 22 Jun 2010 12:44:32 -0500
 
 tcpdump (4.1.1-1) unstable; urgency=low
 
@@ -208,44 +283,6 @@ tcpdump (4.1.1-1) unstable; urgency=low
     Christophe Rhodes <csr21@cantab.net> (closes: #575724).
 
  -- Romain Francoise <rfrancoise@debian.org>  Tue, 06 Apr 2010 19:58:14 +0200
-
-tcpdump (4.0.0-6ubuntu4) maverick; urgency=low
-
-  * debian/usr.sbin.tcpdump:
-    - allow device probing (LP: #585150)
-    - allow 'w' access to /dev/bus/usb/**/[0-9]*, needed for proper USB
-      probing with libpcap 1.1 and higher
-
- -- Jamie Strandboge <jamie@ubuntu.com>  Thu, 10 Jun 2010 14:54:22 -0500
-
-tcpdump (4.0.0-6ubuntu3) lucid; urgency=low
-
-  * debian/usr.sbin.tcpdump: allow access for usbmon (LP: #523345)
-
- -- Jamie Strandboge <jamie@ubuntu.com>  Tue, 23 Mar 2010 14:31:59 -0500
-
-tcpdump (4.0.0-6ubuntu2) lucid; urgency=low
-
-  * clean up installation of apparmor profile. Thanks to Colin Watson for
-    helping me diagnose the problem (LP: #504903)
-    - debian/rules: remove 'binary' target
-    - add debian/install
-
- -- Jamie Strandboge <jamie@ubuntu.com>  Fri, 08 Jan 2010 13:34:56 -0600
-
-tcpdump (4.0.0-6ubuntu1) lucid; urgency=low
-
-  * Merge from debian testing. Remaining changes:
-    - add enforcing AppArmor profile
-      - create debian/usr.sbin.tcpdump
-      - debian/control: suggest apparmor >= 2.3
-      - debian/postrm: remove force-complain and disable links on purge
-      - debian/rules: update 'binary' target to add profile
-      - debian/README.Debian: give information on AppArmor
-      - debian/postinst: reload tcpdump profile
-      - debian/tcpdump.dirs: added back for AppArmor directories
-
- -- Jamie Strandboge <jamie@ubuntu.com>  Tue, 05 Jan 2010 08:21:25 -0600
 
 tcpdump (4.0.0-6) unstable; urgency=low
 
@@ -269,29 +306,6 @@ tcpdump (4.0.0-5) unstable; urgency=low
 
  -- Romain Francoise <rfrancoise@debian.org>  Sun, 08 Nov 2009 17:25:38 +0100
 
-tcpdump (4.0.0-4ubuntu2) lucid; urgency=low
-
-  * debian/usr.sbin.tcpdump: require 'owner' for file in @{HOME}
-
- -- Jamie Strandboge <jamie@ubuntu.com>  Fri, 04 Dec 2009 09:02:14 -0600
-
-tcpdump (4.0.0-4ubuntu1) lucid; urgency=low
-
-  * Merge from debian unstable (LP: #473236), remaining changes:
-    - add enforcing apparmor profile
-      - create debian/usr.sbin.tcpdump
-      - debian/control: suggest apparmor >= 2.3
-      - debian/postinst: reload apparmor
-      - debian/postrm: remove force-complain link
-      - debian/tcpdump.install: add profile
-      - debian/rules: install the profile
-      - debian/README.Debian: give information on Apparmor
-      - debian/postinst: reload individual tcpdump profile, not all of apparmor
-      - debian/postrm: also remove any symlinks in the /etc/apparmor.d/disable
-        directory on purge 
-
- -- Nicolas Valcárcel Scerpella (Canonical) <nvalcarcel@canonical.com>  Tue, 03 Nov 2009 14:47:48 -0500
-
 tcpdump (4.0.0-4) unstable; urgency=low
 
   * debian/control:
@@ -309,29 +323,6 @@ tcpdump (4.0.0-3) unstable; urgency=low
   * debian/control: Set Standards-Version to 3.8.1.
 
  -- Romain Francoise <rfrancoise@debian.org>  Tue, 16 Jun 2009 11:51:14 +0200
-
-tcpdump (4.0.0-2ubuntu2) karmic; urgency=low
-
-  * debian/postinst: reload individual tcpdump profile, not all of apparmor
-    (LP: #412749)
-  * debian/postrm: also remove any symlinks in the /etc/apparmor.d/disable
-    directory on purge
-
- -- Jamie Strandboge <jamie@ubuntu.com>  Wed, 12 Aug 2009 16:58:28 -0500
-
-tcpdump (4.0.0-2ubuntu1) karmic; urgency=low
-
-  * Merge from debian unstable, remaining changes:
-    - add enforcing apparmor profile
-      - create debian/usr.sbin.tcpdump
-      - debian/control: suggest apparmor >= 2.3
-      - debian/postinst: reload apparmor
-      - debian/postrm: remove force-complain link
-      - debian/tcpdump.install: add profile
-      - debian/rules: install the profile
-      - debian/README.Debian: give information on Apparmor
-
- -- Jamie Strandboge <jamie@ubuntu.com>  Thu, 14 May 2009 12:58:52 -0500
 
 tcpdump (4.0.0-2) unstable; urgency=low
 
@@ -356,25 +347,6 @@ tcpdump (4.0.0-1~exp1) experimental; urgency=low
     tcpdump binaries.
 
  -- Romain Francoise <rfrancoise@debian.org>  Sun, 30 Nov 2008 22:55:39 +0100
-
-tcpdump (3.9.8-4ubuntu2) jaunty; urgency=low
-
-  * debian/usr.sbin.tcpdump: use 'audit deny' instead of 'deny' (LP: #348592)
-
- -- Jamie Strandboge <jamie@ubuntu.com>  Wed, 25 Mar 2009 13:33:28 -0500
-
-tcpdump (3.9.8-4ubuntu1) jaunty; urgency=low
-
-  * add enforcing apparmor profile
-    - create debian/usr.sbin.tcpdump
-    - debian/control: suggest apparmor >= 2.3
-    - debian/postinst: reload apparmor
-    - debian/postrm: remove force-complain link
-    - debian/tcpdump.install: add profile
-    - debian/rules: install the profile
-    - debian/README.Debian: give information on Apparmor
-
- -- Jamie Strandboge <jamie@ubuntu.com>  Tue, 03 Feb 2009 01:54:34 +0100
 
 tcpdump (3.9.8-4) unstable; urgency=low
 
@@ -804,6 +776,7 @@ tcpdump (3.4a6-3) frozen unstable; urgency=low
 
  -- Peter Tobias <tobias@et-inf.fho-emden.de>  Mon, 30 Mar 1998 02:28:39 +0200
 
+
 tcpdump (3.4a6-2) frozen unstable; urgency=low
 
   * rebuild with latest debmake, fixes #19415
@@ -812,12 +785,14 @@ tcpdump (3.4a6-2) frozen unstable; urgency=low
 
  -- Peter Tobias <tobias@et-inf.fho-emden.de>  Mon, 30 Mar 1998 00:28:39 +0200
 
+
 tcpdump (3.4a6-1) unstable; urgency=low
 
   * updated to latest upstream version, fixes: Bug#17163
   * install changelog.Debian compressed, fixes: Bug#15417
 
  -- Peter Tobias <tobias@et-inf.fho-emden.de>  Sun,  1 Feb 1998 00:08:31 +0100
+
 
 tcpdump (3.4a4-1) unstable; urgency=low
 
@@ -826,11 +801,13 @@ tcpdump (3.4a4-1) unstable; urgency=low
 
  -- Peter Tobias <tobias@et-inf.fho-emden.de>  Wed, 17 Sep 1997 23:22:54 +0200
 
+
 tcpdump (3.3.1a2-1) frozen stable unstable; urgency=medium
 
   * updated to latest upstream version (works with new libpcap now)
 
  -- Peter Tobias <tobias@et-inf.fho-emden.de>  Sat, 24 May 1997 00:49:17 +0200
+
 
 tcpdump (3.3-2) unstable; urgency=low
 
@@ -838,9 +815,11 @@ tcpdump (3.3-2) unstable; urgency=low
 
  -- Peter Tobias <tobias@et-inf.fho-emden.de>  Sun, 16 Feb 1997 21:06:51 +0100
 
+
 tcpdump (3.3-1) unstable; urgency=low
 
   * updated to latest upstream version
 
  -- Peter Tobias <tobias@et-inf.fho-emden.de>  Thu, 16 Jan 1997 01:34:00 +0100
+
 
