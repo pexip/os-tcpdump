@@ -1,3 +1,9 @@
+tcpdump (4.9.0-1~deb8u1pexip2) pexip; urgency=low
+
+  * debian/{maintscript, postinst}: remove AppArmor profile on upgrade
+
+ -- John-Mark Bell <jmb@pexip.com>  Fri, 26 May 2017 12:56:36 +0100
+
 tcpdump (4.9.0-1~deb8u1pexip1) pexip; urgency=low
 
   * Migrate to Jessie
