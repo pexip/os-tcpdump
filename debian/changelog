@@ -1,18 +1,18 @@
-tcpdump (4.9.2-1~deb8u1) jessie-security; urgency=high
+tcpdump (4.9.2-1~deb9u1) stretch-security; urgency=high
 
   * New upstream release, fixing 90 new CVEs. See the upstream changelog
     for the full list (closes: #867718, #873804, #873805, #873806).
 
- -- Romain Francoise <rfrancoise@debian.org>  Sat, 09 Sep 2017 21:39:47 +0200
+ -- Romain Francoise <rfrancoise@debian.org>  Sat, 09 Sep 2017 20:33:48 +0200
 
-tcpdump (4.9.0-1~deb8u1) jessie-security; urgency=high
+tcpdump (4.9.0-2) unstable; urgency=medium
 
-  * Backport to jessie:
-    + Re-enable crypto support.
-    + Disable tests that require newer libpcap features: Geneve (1.7) and
-      file format version checks (1.8), and relax B-D on libpcap0.8-dev.
+  * Re-enable crypto support, targeting OpenSSL 1.0 as upstream still
+    doesn't support OpenSSL 1.1.
+  * Drop --enable-ipv6 from configure line, it has been the default for
+    years now.
 
- -- Romain Francoise <rfrancoise@debian.org>  Sat, 28 Jan 2017 17:11:07 +0100
+ -- Romain Francoise <rfrancoise@debian.org>  Sat, 11 Feb 2017 16:40:05 +0100
 
 tcpdump (4.9.0-1) unstable; urgency=high
 
@@ -110,14 +110,6 @@ tcpdump (4.7.4-1) unstable; urgency=medium
   * Bump Standards-Version to 3.9.6.
 
  -- Romain Francoise <rfrancoise@debian.org>  Sat, 23 May 2015 18:25:01 +0200
-
-tcpdump (4.6.2-5+deb8u1) stable; urgency=low
-
-  * Cherry-pick commit 3f15ae25c2 from upstream Git to fix -Z confirmation
-    log being sent to stdout, where it can get mixed with pcap stream
-    data if '-w -' is used (closes: #793479).
-
- -- Romain Francoise <rfrancoise@debian.org>  Sun, 02 Aug 2015 19:57:22 +0200
 
 tcpdump (4.6.2-5) unstable; urgency=high
 
