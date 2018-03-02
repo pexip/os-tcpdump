@@ -1,0 +1,72 @@
+diff --git a/tcpdump.c b/tcpdump.c
+index d9c7f7a..7f299c7 100644
+--- a/tcpdump.c
++++ b/tcpdump.c
+@@ -1241,8 +1241,8 @@ main(int argc, char **argv)
+ 			if (Gflag < 0)
+ 				error("invalid number of seconds %s", optarg);
+ 
+-                        /* We will create one file initially. */
+-                        Gflag_count = 0;
++			/* We will create one file initially. */
++			Gflag_count = 0;
+ 
+ 			/* Grab the current time for rotation use. */
+ 			if ((Gflag_time = time(NULL)) == (time_t)-1) {
+@@ -2320,10 +2320,15 @@ dump_packet_and_trunc(u_char *user, const struct pcap_pkthdr *h, const u_char *s
+ 				compress_savefile(dump_info->CurrentFileName);
+ 
+ 			/*
+-			 * Check to see if we've exceeded the Wflag (when
+-			 * not using Cflag).
++			 * If Cflag is also set, use Gflag as backstop timer.
++			 * If not using Cflag, check to see if we've exceeded the Wflag.
+ 			 */
+-			if (Cflag == 0 && Wflag > 0 && Gflag_count >= Wflag) {
++			if (Cflag != 0) {
++				(void)fprintf(stderr, "Time limit reached: %d seconds\n",
++				    Gflag);
++				info(1);
++				exit_tcpdump(0);
++			} else if (Cflag == 0 && Wflag > 0 && Gflag_count >= Wflag) {
+ 				(void)fprintf(stderr, "Maximum file limit reached: %d\n",
+ 				    Wflag);
+ 				info(1);
+@@ -2336,12 +2341,6 @@ dump_packet_and_trunc(u_char *user, const struct pcap_pkthdr *h, const u_char *s
+ 			dump_info->CurrentFileName = (char *)malloc(PATH_MAX + 1);
+ 			if (dump_info->CurrentFileName == NULL)
+ 				error("dump_packet_and_trunc: malloc");
+-			/*
+-			 * Gflag was set otherwise we wouldn't be here. Reset the count
+-			 * so multiple files would end with 1,2,3 in the filename.
+-			 * The counting is handled with the -C flow after this.
+-			 */
+-			Cflag_count = 0;
+ 
+ 			/*
+ 			 * This is always the first file in the Cflag
+@@ -2415,11 +2414,24 @@ dump_packet_and_trunc(u_char *user, const struct pcap_pkthdr *h, const u_char *s
+ 			if (zflag != NULL)
+ 				compress_savefile(dump_info->CurrentFileName);
+ 
++			/*
++			 * Special case Wflag == 1 and stop without further iteration.
++			 */
++			if (Wflag == 1) {
++				(void)fprintf(stderr, "Capture size limit reached\n");
++				info(1);
++				exit_tcpdump(0);
++			}
++
++			/*
++			 * Increment the count. If count exceeds Wflag, start again.
++			 */
+ 			Cflag_count++;
+ 			if (Wflag > 0) {
+ 				if (Cflag_count >= Wflag)
+ 					Cflag_count = 0;
+ 			}
++
+ 			if (dump_info->CurrentFileName != NULL)
+ 				free(dump_info->CurrentFileName);
+ 			dump_info->CurrentFileName = (char *)malloc(PATH_MAX + 1);
