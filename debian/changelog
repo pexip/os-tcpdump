@@ -1,3 +1,11 @@
+tcpdump (4.9.3-1~deb9u1) stretch-security; urgency=high
+
+  * New upstream release, with fixes for 24 different CVEs (closes: #941698).
+    This is an upstream update on top of the 4.9.2-1~deb9u1 package.
+  * Disable tests that require a newer libpcap version.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sat, 19 Oct 2019 17:18:00 +0200
+
 tcpdump (4.9.2-1~deb9u1) stretch-security; urgency=high
 
   * New upstream release, fixing 90 new CVEs. See the upstream changelog
