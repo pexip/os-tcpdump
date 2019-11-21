@@ -1,3 +1,17 @@
+tcpdump (4.9.3-1~deb9u1pexip1) pexip; urgency=medium
+
+  * New upstream release
+
+ -- Vincent Sanders <vince@pexip.com>  Fri, 08 Nov 2019 11:04:47 +0000
+
+tcpdump (4.9.3-1~deb9u1) stretch-security; urgency=high
+
+  * New upstream release, with fixes for 24 different CVEs (closes: #941698).
+    This is an upstream update on top of the 4.9.2-1~deb9u1 package.
+  * Disable tests that require a newer libpcap version.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sat, 19 Oct 2019 17:18:00 +0200
+
 tcpdump (4.9.2-1~deb9u1pexip1) pexip; urgency=medium
 
   * Migrate to Stretch

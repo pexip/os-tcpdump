@@ -1,11 +1,95 @@
 --- a/tests/crypto.sh
 +++ b/tests/crypto.sh
-@@ -72,7 +72,7 @@
- 			echo $failed >.failed
+@@ -82,7 +82,7 @@
+ 			echo $failed >${failedfile}
  			exitcode=1
  		fi
--		if ./TESTonce ikev2pI2 ikev2pI2.pcap ikev2pI2.out '-E "file ikev2pI2-secrets.txt" -v -v -v -v'
-+		if ./TESTonce ikev2pI2 ikev2pI2.pcap ikev2pI2.out '-E "file ikev2pI2-secrets.txt" -v -v -v -v' || true
+-		if ${testdir}/TESTonce ikev2pI2 ${testdir}/ikev2pI2.pcap ${testdir}/ikev2pI2.out '-E "file '${testdir}'/ikev2pI2-secrets.txt" -v -v -v -v'
++		if ${testdir}/TESTonce ikev2pI2 ${testdir}/ikev2pI2.pcap ${testdir}/ikev2pI2.out '-E "file '${testdir}'/ikev2pI2-secrets.txt" -v -v -v -v' || true
  		then
  			passed=`expr $passed + 1`
- 			echo $passed >.passed
+ 			echo $passed >${passedfile}
+--- a/tests/TESTLIST
++++ b/tests/TESTLIST
+@@ -324,24 +324,24 @@
+ 
+ # bad packets from Kevin Day
+ # cve-2015-2155 -- fuzz testing on FORCES printer
+-kday1           kday1.pcap              kday1.out       -v
++#kday1           kday1.pcap              kday1.out       -v
+ # cve-2015-2153 -- fuzz testing on TCP printer
+ kday2           kday2.pcap              kday2.out       -v
+ # cve-2015-2153 -- fuzz testing on TCP printer
+-kday3           kday3.pcap              kday3.out       -v
++#kday3           kday3.pcap              kday3.out       -v
+ # cve-2015-2153 -- fuzz testing on TCP printer
+ kday4           kday4.pcap              kday4.out       -v
+ # cve-2015-2153 -- fuzz testing on TCP printer
+-kday5           kday5.pcap              kday5.out       -v
++#kday5           kday5.pcap              kday5.out       -v
+ # cve-2015-2154 -- ethernet printer
+-kday6           kday6.pcap              kday6.out       -v
++#kday6           kday6.pcap              kday6.out       -v
+ # cve-2015-2153 -- fuzz testing on TCP printer
+-kday7           kday7.pcap              kday7.out       -v
++#kday7           kday7.pcap              kday7.out       -v
+ # cve-2015-2153 -- fuzz testing on TCP printer
+ kday8           kday8.pcap              kday8.out       -v
+ 
+ # bad packets from reversex86.
+-cve2015-0261_01    cve2015-0261-ipv6.pcap       cve2015-0261-ipv6.out -v
++#cve2015-0261_01    cve2015-0261-ipv6.pcap       cve2015-0261-ipv6.out -v
+ cve2015-0261_02    cve2015-0261-crash.pcap      cve2015-0261-crash.out -v
+ 
+ # OLSRv1 tests
+@@ -360,8 +360,8 @@
+ pcap-invalid-version-2 pcap-invalid-version-2.pcap pcap-invalid-version-2.out
+ 
+ # pcapng invalid version (first: version = 0.1 ; second: version = 1.1)
+-pcapng-invalid-vers-1 pcapng-invalid-vers-1.pcapng pcapng-invalid-vers-1.out
+-pcapng-invalid-vers-2 pcapng-invalid-vers-2.pcapng pcapng-invalid-vers-2.out
++#pcapng-invalid-vers-1 pcapng-invalid-vers-1.pcapng pcapng-invalid-vers-1.out
++#pcapng-invalid-vers-2 pcapng-invalid-vers-2.pcapng pcapng-invalid-vers-2.out
+ 
+ # NSH over VxLAN-GPE
+ nsh-over-vxlan-gpe     nsh-over-vxlan-gpe.pcap nsh-over-vxlan-gpe.out
+@@ -500,8 +500,8 @@
+ juniper_es		juniper_es.pcap			juniper_es.out	-vvv -e
+ 
+ # bad packets from Yannick Formaggio
+-l2tp-avp-overflow	l2tp-avp-overflow.pcap		l2tp-avp-overflow.out	-v
+-pktap-heap-overflow	pktap-heap-overflow.pcap	pktap-heap-overflow.out	-v
++#l2tp-avp-overflow	l2tp-avp-overflow.pcap		l2tp-avp-overflow.out	-v
++#pktap-heap-overflow	pktap-heap-overflow.pcap	pktap-heap-overflow.out	-v
+ wb-oobr			wb-oobr.pcap			wb-oobr.out	-v
+ 
+ # bad packets from Bhargava Shastry
+@@ -623,17 +623,17 @@
+ dns-zlip-3		dns-zlip-3.pcap		dns-zlip-3.out
+ 
+ # CVE-2019-15120
+-kh-addrfail-001         kh-addrfail-001.pcap    kh-addrfail-001.out
+-kh-addrfail-002         kh-addrfail-002.pcap    kh-addrfail-002.out
+-kh-addrfail-003         kh-addrfail-003.pcap    kh-addrfail-003.out
+-kh-addrfail-004         kh-addrfail-004.pcap    kh-addrfail-004.out
+-kh-addrfail-005         kh-addrfail-005.pcap    kh-addrfail-005.out
+-kh-addrfail-006         kh-addrfail-006.pcap    kh-addrfail-006.out
+-kh-addrfail-007         kh-addrfail-007.pcap    kh-addrfail-007.out
+-kh-addrfail-008         kh-addrfail-008.pcap    kh-addrfail-008.out
+-kh-addrfail-009         kh-addrfail-009.pcap    kh-addrfail-009.out
+-kh-addrfail-010         kh-addrfail-010.pcap    kh-addrfail-010.out
+-kh-addrfail-011         kh-addrfail-011.pcap    kh-addrfail-011.out
++#kh-addrfail-001         kh-addrfail-001.pcap    kh-addrfail-001.out
++#kh-addrfail-002         kh-addrfail-002.pcap    kh-addrfail-002.out
++#kh-addrfail-003         kh-addrfail-003.pcap    kh-addrfail-003.out
++#kh-addrfail-004         kh-addrfail-004.pcap    kh-addrfail-004.out
++#kh-addrfail-005         kh-addrfail-005.pcap    kh-addrfail-005.out
++#kh-addrfail-006         kh-addrfail-006.pcap    kh-addrfail-006.out
++#kh-addrfail-007         kh-addrfail-007.pcap    kh-addrfail-007.out
++#kh-addrfail-008         kh-addrfail-008.pcap    kh-addrfail-008.out
++#kh-addrfail-009         kh-addrfail-009.pcap    kh-addrfail-009.out
++#kh-addrfail-010         kh-addrfail-010.pcap    kh-addrfail-010.out
++#kh-addrfail-011         kh-addrfail-011.pcap    kh-addrfail-011.out
+ kh-tcpdump-001          kh-tcpdump-001.pcap     kh-tcpdump-001.out
+ kh-tcpdump-002          kh-tcpdump-002.pcap     kh-tcpdump-002.out
+ 
