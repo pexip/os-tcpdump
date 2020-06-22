@@ -1,3 +1,9 @@
+tcpdump (4.9.3-1~deb10u1pexip1) pexip; urgency=medium
+
+  * Migrate to Buster
+
+ -- Vincent Sanders <vince@pexip.com>  Sun, 01 Mar 2020 21:34:46 +0000
+
 tcpdump (4.9.3-1~deb10u1) buster-security; urgency=high
 
   * New upstream release, with fixes for 24 different CVEs (closes: #941698).
