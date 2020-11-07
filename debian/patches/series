@@ -2,3 +2,4 @@ install.diff
 man-section.diff
 platform-quirks.diff
 disable-tests.diff
+upstream-32027e1993.diff
