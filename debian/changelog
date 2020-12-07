@@ -1,3 +1,16 @@
+tcpdump (4.9.3-1~deb10u2pexip1) pexip; urgency=medium
+
+  * New upstream release
+
+ -- Steve McIntyre <steve.mcintyre@pexip.com>  Mon, 07 Dec 2020 16:40:37 +0000
+
+tcpdump (4.9.3-1~deb10u2) buster; urgency=high
+
+  * Cherry-pick commit 32027e1993 from the upstream tcpdump-4.9 branch to fix
+    untrusted input issue in the PPP printer (CVE-2020-8037, closes: #973877).
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sat, 07 Nov 2020 13:36:24 +0100
+
 tcpdump (4.9.3-1~deb10u1pexip2) pexip; urgency=medium
 
   * Rebuild in buster environment
