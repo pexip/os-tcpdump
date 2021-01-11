@@ -1,3 +1,9 @@
+tcpdump (4.9.3-1~deb10u2pexip2) pexip; urgency=medium
+
+  * Expunge zflag.
+
+ -- Alan Ford <alan@pexip.com>  Mon, 11 Jan 2021 11:44:00 +0000
+
 tcpdump (4.9.3-1~deb10u2pexip1) pexip; urgency=medium
 
   * New upstream release

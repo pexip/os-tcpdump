@@ -1,0 +1,128 @@
+diff --git a/tcpdump.c b/tcpdump.c
+index 043bda1..915994b 100644
+--- a/tcpdump.c
++++ b/tcpdump.c
+@@ -162,7 +162,6 @@
+ static int Uflag;			/* "unbuffered" output of dump files */
+ static int Wflag;			/* recycle output files after this number of files */
+ static int WflagChars;
+-static char *zflag = NULL;		/* compress each savefile using a specified command (like gzip or bzip2) */
+ static int immediate_mode;
+ 
+ static int infodelay;
+@@ -1480,10 +1479,6 @@
+ 			}
+ 			break;
+ #endif
+-		case 'z':
+-			zflag = optarg;
+-			break;
+-
+ 		case 'Z':
+ 			username = optarg;
+ 			break;
+@@ -1996,7 +1991,7 @@
+ 	}
+ 
+ #ifdef HAVE_CAPSICUM
+-	cansandbox = (ndo->ndo_nflag && VFileName == NULL && zflag == NULL);
++	cansandbox = (ndo->ndo_nflag && VFileName == NULL);
+ 	if (cansandbox && cap_enter() < 0 && errno != ENOSYS)
+ 		error("unable to enter the capability mode");
+ #endif	/* HAVE_CAPSICUM */
+@@ -2219,59 +2214,6 @@
+ 	infoprint = 0;
+ }
+ 
+-#if defined(HAVE_FORK) || defined(HAVE_VFORK)
+-#ifdef HAVE_FORK
+-#define fork_subprocess() fork()
+-#else
+-#define fork_subprocess() vfork()
+-#endif
+-static void
+-compress_savefile(const char *filename)
+-{
+-	pid_t child;
+-
+-	child = fork_subprocess();
+-	if (child == -1) {
+-		fprintf(stderr,
+-			"compress_savefile: fork failed: %s\n",
+-			pcap_strerror(errno));
+-		return;
+-	}
+-	if (child != 0) {
+-		/* Parent process. */
+-		return;
+-	}
+-
+-	/*
+-	 * Child process.
+-	 * Set to lowest priority so that this doesn't disturb the capture.
+-	 */
+-#ifdef NZERO
+-	setpriority(PRIO_PROCESS, 0, NZERO - 1);
+-#else
+-	setpriority(PRIO_PROCESS, 0, 19);
+-#endif
+-	if (execlp(zflag, zflag, filename, (char *)NULL) == -1)
+-		fprintf(stderr,
+-			"compress_savefile: execlp(%s, %s) failed: %s\n",
+-			zflag,
+-			filename,
+-			pcap_strerror(errno));
+-#ifdef HAVE_FORK
+-	exit(1);
+-#else
+-	_exit(1);
+-#endif
+-}
+-#else  /* HAVE_FORK && HAVE_VFORK */
+-static void
+-compress_savefile(const char *filename)
+-{
+-	fprintf(stderr,
+-		"compress_savefile failed. Functionality not implemented under your system\n");
+-}
+-#endif /* HAVE_FORK && HAVE_VFORK */
+-
+ static void
+ dump_packet_and_trunc(u_char *user, const struct pcap_pkthdr *h, const u_char *sp)
+ {
+@@ -2319,12 +2261,6 @@
+ 			pcap_dump_close(dump_info->p);
+ 
+ 			/*
+-			 * Compress the file we just closed, if the user asked for it
+-			 */
+-			if (zflag != NULL)
+-				compress_savefile(dump_info->CurrentFileName);
+-
+-			/*
+ 			 * If Cflag is also set, use Gflag as backstop timer.
+ 			 * If not using Cflag, check to see if we've exceeded the Wflag.
+ 			 */
+@@ -2413,13 +2349,6 @@
+ 			pcap_dump_close(dump_info->p);
+ 
+ 			/*
+-			 * Compress the file we just closed, if the user
+-			 * asked for it.
+-			 */
+-			if (zflag != NULL)
+-				compress_savefile(dump_info->CurrentFileName);
+-
+-			/*
+ 			 * Special case Wflag == 1 and stop without further iteration.
+ 			 */
+ 			if (Wflag == 1) {
+@@ -2649,7 +2578,7 @@
+ #endif
+ 	(void)fprintf(stderr, "[ -T type ] [ --version ] [ -V file ]\n");
+ 	(void)fprintf(stderr,
+-"\t\t[ -w file ] [ -W filecount ] [ -y datalinktype ] [ -z postrotate-command ]\n");
++"\t\t[ -w file ] [ -W filecount ] [ -y datalinktype ]\n");
+ 	(void)fprintf(stderr,
+ "\t\t[ -Z user ] [ expression ]\n");
+ }
