@@ -1,0 +1,2 @@
+Test-Command: env TCPDUMP_BIN=/usr/bin/tcpdump ./tests/TESTrun
+Restrictions: build-needed
