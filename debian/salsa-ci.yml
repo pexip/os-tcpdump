@@ -4,7 +4,4 @@ include:
   - https://salsa.debian.org/salsa-ci-team/pipeline/raw/master/pipeline-jobs.yml
 
 variables:
-  RELEASE: 'bullseye'
-  SALSA_CI_DISABLE_VERSION_BUMP: "true"
-  SALSA_CI_DISABLE_AUTOPKGTEST: 1
   SALSA_CI_DISABLE_REPROTEST: 1

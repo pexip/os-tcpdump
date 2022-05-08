@@ -9,4 +9,18 @@ if ! getent passwd tcpdump >/dev/null 2>&1; then
 	    tcpdump
 fi
 
+# dh_apparmor leaves behind the local profile for the old binary
+# location (/usr/sbin/tcpdump), we need to clean it up (#990554).
+#
+# Only remove it if it's empty, meaning that the system doesn't have
+# local configuration.
+if dpkg --compare-versions "$2" lt-nl "4.99.1-3~"; then
+    OLD_LOCAL_APP_PROFILE="/etc/apparmor.d/local/usr.sbin.tcpdump"
+    if [ -e "$OLD_LOCAL_APP_PROFILE" ]; then
+	if [ ! -s "$OLD_LOCAL_APP_PROFILE" ]; then
+	    rm -f "$OLD_LOCAL_APP_PROFILE"
+	fi
+    fi
+fi
+
 #DEBHELPER#

@@ -1,10 +1,32 @@
-tcpdump (4.99.0-2+deb11u1) bullseye; urgency=medium
+tcpdump (4.99.1-4) unstable; urgency=medium
 
-  * Minor AppArmor profile updates (debian/usr.bin.tcpdump):
-    + Grant access to *.cap (closes: #989433).
-    + Account for numerical suffix in filenames added by -W (closes: #1010688).
+  * debian/usr.bin.tcpdump: account for numerical suffix in filenames
+    added by -W (closes: #1010688).
 
- -- Romain Francoise <rfrancoise@debian.org>  Sun, 22 May 2022 18:22:50 +0200
+ -- Romain Francoise <rfrancoise@debian.org>  Sun, 08 May 2022 18:25:45 +0200
+
+tcpdump (4.99.1-3) unstable; urgency=medium
+
+  * Clean up AppArmor local profile for /usr/sbin/tcpdump, if it's still
+    empty (closes: #990554).
+  * Switch to debhelper compat level 13.
+  * Set `Rules-Requires-Root' to "no".
+  * Bump Standards-Version to 4.6.0.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sun, 12 Sep 2021 18:55:44 +0200
+
+tcpdump (4.99.1-2) unstable; urgency=medium
+
+  * Upload to unstable.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sun, 15 Aug 2021 17:29:54 +0200
+
+tcpdump (4.99.1-1) experimental; urgency=medium
+
+  * New upstream release.
+  * debian/usr.bin.tcpdump: grant access to *.cap (closes: #989433).
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sun, 20 Jun 2021 20:48:30 +0200
 
 tcpdump (4.99.0-2) unstable; urgency=medium
 
