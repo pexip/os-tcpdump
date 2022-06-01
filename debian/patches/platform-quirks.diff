@@ -2,10 +2,10 @@ Build changes for GNU/Hurd.
 
 --- a/netdissect-stdinc.h
 +++ b/netdissect-stdinc.h
-@@ -199,7 +199,11 @@
- #elif HAVE_STDINT_H
- #include <stdint.h>
- #endif
+@@ -228,7 +228,11 @@
+ 
+ #include <unistd.h>
+ #include <netdb.h>
 +#ifndef __GNU__
  #include <sys/param.h>
 +#else

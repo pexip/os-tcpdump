@@ -1,3 +1,72 @@
+tcpdump (4.99.0-2) unstable; urgency=medium
+
+  * Add autopkgtest support, running the upstream test suite.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Fri, 15 Jan 2021 23:41:47 +0100
+
+tcpdump (4.99.0-1) unstable; urgency=medium
+
+  * New upstream release.
+  * Mention in debian/NEWS that tcpdump is now installed to /usr/bin
+    instead of /usr/sbin.
+  * Rename AppArmor profile to match new binary location and add
+    maintscript stanza to move the previous conffile if present.
+  * Temporarily disable tests that require the just-released libpcap 1.10,
+    we don't want to tie the migration of the two just before the bullseye
+    freeze.
+  * Drop unused lintian override.
+  * Bump Standards-Version to 4.5.1.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sun, 03 Jan 2021 21:28:16 +0100
+
+tcpdump (4.9.3-7) unstable; urgency=high
+
+  * Cherry-pick commit 32027e1993 from the upstream tcpdump-4.9 branch to fix
+    untrusted input issue in the PPP printer (CVE-2020-8037, closes: #973877).
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sat, 07 Nov 2020 13:19:14 +0100
+
+tcpdump (4.9.3-6) unstable; urgency=medium
+
+  [ Simon Deziel ]
+  * debian/usr.sbin.tcpdump: use profile name specifier instead of
+    '/usr/sbin/tcpdump'.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Thu, 28 May 2020 19:23:57 +0200
+
+tcpdump (4.9.3-5) unstable; urgency=medium
+
+  * Minor packaging fixes courtesy of the Janitor bot and lintian-brush:
+    + Set upstream metadata fields: Bug-Submit, Repository, Repository-
+      Browse.
+  * Bump Standards-Version to 4.5.0.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sat, 09 May 2020 20:42:57 +0200
+
+tcpdump (4.9.3-4) unstable; urgency=medium
+
+  * Set upstream metadata fields: Bug-Database.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Tue, 31 Dec 2019 19:24:04 +0100
+
+tcpdump (4.9.3-3) unstable; urgency=medium
+
+  * Minor packaging fixes courtesy of the Janitor bot and lintian-brush:
+    + Use secure URI in debian/watch.
+    + Use secure URI in Homepage field.
+    + Bump debhelper from old 11 to 12.
+    + Set debhelper-compat version in Build-Depends.
+    + Re-export upstream signing key without extra signatures.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sun, 08 Dec 2019 13:56:42 +0100
+
+tcpdump (4.9.3-2) unstable; urgency=medium
+
+  * Disable failing IKEv2 test yet again to fix build on ppc64el (again)
+    (closes: #942171).
+
+ -- Romain Francoise <rfrancoise@debian.org>  Fri, 11 Oct 2019 20:48:04 +0200
+
 tcpdump (4.9.3-1~deb10u2pexip2) pexip; urgency=medium
 
   * Expunge zflag.
@@ -9,13 +78,6 @@ tcpdump (4.9.3-1~deb10u2pexip1) pexip; urgency=medium
   * New upstream release
 
  -- Steve McIntyre <steve.mcintyre@pexip.com>  Mon, 07 Dec 2020 16:40:37 +0000
-
-tcpdump (4.9.3-1~deb10u2) buster; urgency=high
-
-  * Cherry-pick commit 32027e1993 from the upstream tcpdump-4.9 branch to fix
-    untrusted input issue in the PPP printer (CVE-2020-8037, closes: #973877).
-
- -- Romain Francoise <rfrancoise@debian.org>  Sat, 07 Nov 2020 13:36:24 +0100
 
 tcpdump (4.9.3-1~deb10u1pexip2) pexip; urgency=medium
 
@@ -29,20 +91,49 @@ tcpdump (4.9.3-1~deb10u1pexip1) pexip; urgency=medium
 
  -- Vincent Sanders <vince@pexip.com>  Sun, 01 Mar 2020 21:34:46 +0000
 
-tcpdump (4.9.3-1~deb10u1) buster-security; urgency=high
-
-  * New upstream release, with fixes for 24 different CVEs (closes: #941698).
-    This is an upstream update on top of the 4.9.2-3 package and does not
-    include other changes from the 4.9.3 package in bullseye.
-  * Disable tests that require a newer libpcap version.
-
- -- Romain Francoise <rfrancoise@debian.org>  Sat, 19 Oct 2019 16:55:18 +0200
-
 tcpdump (4.9.3-1~deb9u1pexip1) pexip; urgency=medium
 
   * New upstream release
 
  -- Vincent Sanders <vince@pexip.com>  Fri, 08 Nov 2019 11:04:47 +0000
+
+tcpdump (4.9.3-1) unstable; urgency=medium
+
+  * New upstream release, with fixes for 24 different CVEs (closes: #941698).
+  * Build-depend on libpcap >= 1.9.1 to make all build-time tests pass.
+  * Re-enable IKEv2 test.
+  * Bump Standards-Version to 4.4.1.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Thu, 10 Oct 2019 21:31:38 +0200
+
+tcpdump (4.9.3~git20190901-2) unstable; urgency=medium
+
+  * Disable failing IKEv2 test again to fix build on ppc64el.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sat, 07 Sep 2019 12:14:43 +0200
+
+tcpdump (4.9.3~git20190901-1) unstable; urgency=low
+
+  * New upstream snapshot from the tcpdump-4.9 branch:
+    + Includes fix for CVE-2017-16808 (closes: #881862).
+    + Fixes ESP decryption on ppc64el (and others), re-enable tests.
+  * Drop root privileges by default (closes: #935112):
+    + debian/rules: Configure --with-user=tcpdump.
+    + debian/tcpdump.post{inst,rm}: Create/delete a 'tcpdump' system group
+      and user.
+    + debian/control: Add dependency on adduser.
+    + debian/patches/drop-privs-after-opening-savefile.diff: New patch
+      (from Fedora) to drop root privileges *after* opening the savefile
+      when possible, to alleviate possible inconvenience if the target
+      directory is not writable by user tcpdump.
+    + debian/patches/drop-privs-silently.diff: New patch (from Fedora) to
+      drop root privileges silently.
+    + debian/usr.sbin.tcpdump: Add chown capability, and update rules
+      about device discovery.
+    + debian/NEWS: Mention how to run tcpdump as root.
+  * Bump Standards-Version to 4.4.0.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sun, 01 Sep 2019 13:05:24 +0200
 
 tcpdump (4.9.2-3) unstable; urgency=medium
 

@@ -1,0 +1,12 @@
+#!/bin/sh -e
+
+if ! getent group tcpdump >/dev/null 2>&1; then
+    addgroup --system --quiet tcpdump
+fi
+if ! getent passwd tcpdump >/dev/null 2>&1; then
+    adduser --system --quiet --ingroup tcpdump		\
+	    --no-create-home --home /nonexistent	\
+	    tcpdump
+fi
+
+#DEBHELPER#
