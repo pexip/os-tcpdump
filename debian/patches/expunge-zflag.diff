@@ -1,16 +1,14 @@
-diff --git a/tcpdump.c b/tcpdump.c
-index 043bda1..915994b 100644
 --- a/tcpdump.c
 +++ b/tcpdump.c
-@@ -162,7 +162,6 @@
- static int Uflag;			/* "unbuffered" output of dump files */
+@@ -226,7 +226,6 @@
+ #endif
  static int Wflag;			/* recycle output files after this number of files */
  static int WflagChars;
 -static char *zflag = NULL;		/* compress each savefile using a specified command (like gzip or bzip2) */
+ static int timeout = 1000;		/* default timeout = 1000 ms = 1 s */
+ #ifdef HAVE_PCAP_SET_IMMEDIATE_MODE
  static int immediate_mode;
- 
- static int infodelay;
-@@ -1480,10 +1479,6 @@
+@@ -1872,10 +1871,6 @@
  			}
  			break;
  #endif
@@ -21,16 +19,16 @@ index 043bda1..915994b 100644
  		case 'Z':
  			username = optarg;
  			break;
-@@ -1996,7 +1991,7 @@
+@@ -2535,7 +2530,7 @@
  	}
  
  #ifdef HAVE_CAPSICUM
--	cansandbox = (ndo->ndo_nflag && VFileName == NULL && zflag == NULL);
-+	cansandbox = (ndo->ndo_nflag && VFileName == NULL);
- 	if (cansandbox && cap_enter() < 0 && errno != ENOSYS)
- 		error("unable to enter the capability mode");
- #endif	/* HAVE_CAPSICUM */
-@@ -2219,59 +2214,6 @@
+-	cansandbox = (VFileName == NULL && zflag == NULL);
++	cansandbox = (VFileName == NULL);
+ #ifdef HAVE_CASPER
+ 	cansandbox = (cansandbox && (ndo->ndo_nflag || capdns != NULL));
+ #else
+@@ -2796,59 +2791,6 @@
  	infoprint = 0;
  }
  
@@ -73,9 +71,9 @@ index 043bda1..915994b 100644
 -			filename,
 -			pcap_strerror(errno));
 -#ifdef HAVE_FORK
--	exit(1);
+-	exit(S_ERR_HOST_PROGRAM);
 -#else
--	_exit(1);
+-	_exit(S_ERR_HOST_PROGRAM);
 -#endif
 -}
 -#else  /* HAVE_FORK && HAVE_VFORK */
@@ -90,8 +88,8 @@ index 043bda1..915994b 100644
  static void
  dump_packet_and_trunc(u_char *user, const struct pcap_pkthdr *h, const u_char *sp)
  {
-@@ -2319,12 +2261,6 @@
- 			pcap_dump_close(dump_info->p);
+@@ -2896,12 +2838,6 @@
+ 			pcap_dump_close(dump_info->pdd);
  
  			/*
 -			 * Compress the file we just closed, if the user asked for it
@@ -103,8 +101,8 @@ index 043bda1..915994b 100644
  			 * If Cflag is also set, use Gflag as backstop timer.
  			 * If not using Cflag, check to see if we've exceeded the Wflag.
  			 */
-@@ -2413,13 +2349,6 @@
- 			pcap_dump_close(dump_info->p);
+@@ -3000,13 +2936,6 @@
+ 			pcap_dump_close(dump_info->pdd);
  
  			/*
 -			 * Compress the file we just closed, if the user
@@ -117,12 +115,10 @@ index 043bda1..915994b 100644
  			 * Special case Wflag == 1 and stop without further iteration.
  			 */
  			if (Wflag == 1) {
-@@ -2649,7 +2578,7 @@
+@@ -3233,5 +3162,5 @@
+ "\t\t[ --time-stamp-precision precision ] [ --micro ] [ --nano ]\n");
  #endif
- 	(void)fprintf(stderr, "[ -T type ] [ --version ] [ -V file ]\n");
- 	(void)fprintf(stderr,
--"\t\t[ -w file ] [ -W filecount ] [ -y datalinktype ] [ -z postrotate-command ]\n");
-+"\t\t[ -w file ] [ -W filecount ] [ -y datalinktype ]\n");
- 	(void)fprintf(stderr,
- "\t\t[ -Z user ] [ expression ]\n");
+ 	(void)fprintf(f,
+-"\t\t[ -z postrotate-command ] [ -Z user ] [ expression ]\n");
++"\t\t[ -Z user ] [ expression ]\n");
  }
