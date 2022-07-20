@@ -1,3 +1,9 @@
+tcpdump (4.99.0-2pexip3) pexip-bullseye; urgency=medium
+
+  * Build-Depend on libssl1.0-dev
+
+ -- John-Mark Bell <jmb@pexip.com>  Wed, 20 Jul 2022 17:10:09 +0100
+
 tcpdump (4.99.0-2pexip2) pexip-bullseye; urgency=medium
 
   * Main bullseye build
