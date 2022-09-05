@@ -1,3 +1,9 @@
+tcpdump (4.99.0-2pexip4) pexip-bullseye; urgency=medium
+
+  * Bullseye rebuild for ARM64 inclusion
+
+ -- Mark Hymers <mark.hymers@pexip.com>  Mon, 05 Sep 2022 10:36:08 +0100
+
 tcpdump (4.99.0-2pexip3) pexip-bullseye; urgency=medium
 
   * Build-Depend on libssl1.0-dev
