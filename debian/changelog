@@ -1,3 +1,11 @@
+tcpdump (4.99.0-2+deb11u1) bullseye; urgency=medium
+
+  * Minor AppArmor profile updates (debian/usr.bin.tcpdump):
+    + Grant access to *.cap (closes: #989433).
+    + Account for numerical suffix in filenames added by -W (closes: #1010688).
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sun, 22 May 2022 18:22:50 +0200
+
 tcpdump (4.99.0-2pexip4) pexip-bullseye; urgency=medium
 
   * Bullseye rebuild for ARM64 inclusion
