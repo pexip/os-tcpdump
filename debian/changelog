@@ -1,3 +1,9 @@
+tcpdump (4.99.0-2+deb11u1pexip1) pexip; urgency=medium
+
+  * New upstream release
+
+ -- Mark Hymers <mark.hymers@pexip.com>  Mon, 10 Oct 2022 16:31:31 +0100
+
 tcpdump (4.99.0-2+deb11u1) bullseye; urgency=medium
 
   * Minor AppArmor profile updates (debian/usr.bin.tcpdump):
