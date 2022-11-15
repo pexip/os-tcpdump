@@ -3,7 +3,7 @@ a versioned binary.
 
 --- a/Makefile.in
 +++ b/Makefile.in
-@@ -420,14 +420,13 @@
+@@ -418,15 +418,14 @@
  	[ -d $(DESTDIR)$(bindir) ] || \
  	    (mkdir -p $(DESTDIR)$(bindir); chmod 755 $(DESTDIR)$(bindir))
  	$(INSTALL_PROGRAM) $(PROG) $(DESTDIR)$(bindir)/$(PROG)
@@ -17,8 +17,9 @@ a versioned binary.
  
  uninstall:
  	rm -f $(DESTDIR)$(bindir)/$(PROG)
+ 	rm -f $(DESTDIR)$(bindir)/$(PROG).`cat ${srcdir}/VERSION`
 -	rm -f $(DESTDIR)$(mandir)/man1/$(PROG).1
 +	rm -f $(DESTDIR)$(mandir)/man8/$(PROG).8
  
- lint: $(GENSRC)
+ lint:
  	lint -hbxn $(SRC) $(LIBNETDISSECT_SRC) | \

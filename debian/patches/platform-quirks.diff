@@ -2,7 +2,7 @@ Build changes for GNU/Hurd.
 
 --- a/netdissect-stdinc.h
 +++ b/netdissect-stdinc.h
-@@ -228,7 +228,11 @@
+@@ -230,7 +230,11 @@
  
  #include <unistd.h>
  #include <netdb.h>

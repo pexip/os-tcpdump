@@ -1,16 +1,44 @@
+tcpdump (4.99.1-4pexip1) pexip; urgency=medium
+
+  * New upstream release
+
+ -- John-Mark Bell <jmb@pexip.com>  Tue, 15 Nov 2022 20:53:45 +0000
+
+tcpdump (4.99.1-4) unstable; urgency=medium
+
+  * debian/usr.bin.tcpdump: account for numerical suffix in filenames
+    added by -W (closes: #1010688).
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sun, 08 May 2022 18:25:45 +0200
+
+tcpdump (4.99.1-3) unstable; urgency=medium
+
+  * Clean up AppArmor local profile for /usr/sbin/tcpdump, if it's still
+    empty (closes: #990554).
+  * Switch to debhelper compat level 13.
+  * Set `Rules-Requires-Root' to "no".
+  * Bump Standards-Version to 4.6.0.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sun, 12 Sep 2021 18:55:44 +0200
+
+tcpdump (4.99.1-2) unstable; urgency=medium
+
+  * Upload to unstable.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sun, 15 Aug 2021 17:29:54 +0200
+
+tcpdump (4.99.1-1) experimental; urgency=medium
+
+  * New upstream release.
+  * debian/usr.bin.tcpdump: grant access to *.cap (closes: #989433).
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sun, 20 Jun 2021 20:48:30 +0200
+
 tcpdump (4.99.0-2+deb11u1pexip1) pexip; urgency=medium
 
   * New upstream release
 
  -- Mark Hymers <mark.hymers@pexip.com>  Mon, 10 Oct 2022 16:31:31 +0100
-
-tcpdump (4.99.0-2+deb11u1) bullseye; urgency=medium
-
-  * Minor AppArmor profile updates (debian/usr.bin.tcpdump):
-    + Grant access to *.cap (closes: #989433).
-    + Account for numerical suffix in filenames added by -W (closes: #1010688).
-
- -- Romain Francoise <rfrancoise@debian.org>  Sun, 22 May 2022 18:22:50 +0200
 
 tcpdump (4.99.0-2pexip4) pexip-bullseye; urgency=medium
 
