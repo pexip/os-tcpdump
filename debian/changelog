@@ -1,4 +1,4 @@
-tcpdump (4.99.1-4pexip1) pexip; urgency=medium
+tcpdump (4.99.1-4pexip1) pexip-bullseye-openssl3; urgency=medium
 
   * New upstream release
 
