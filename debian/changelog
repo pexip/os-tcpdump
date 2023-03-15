@@ -1,3 +1,9 @@
+tcpdump (4.99.3-1pexip1) pexip; urgency=medium
+
+  * New upstream release
+
+ -- Huw Jones <huw@pexip.com>  Wed, 15 Mar 2023 15:47:20 +0000
+
 tcpdump (4.99.3-1) unstable; urgency=medium
 
   * New upstream release.
