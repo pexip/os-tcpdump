@@ -6,8 +6,8 @@ XSBC-Pexip-Original-Maintainer: Romain Francoise <rfrancoise@debian.org>
 Build-Depends: debhelper-compat (= 13),
                dh-apparmor,
                dpkg-dev (>= 1.16.1~),
-               libpcap0.8-dev (>= 1.9.1)
-Standards-Version: 4.6.0
+               libpcap0.8-dev (>= 1.9.1),
+Standards-Version: 4.6.2
 Rules-Requires-Root: no
 Homepage: https://www.tcpdump.org/
 Vcs-Browser: https://salsa.debian.org/rfrancoise/tcpdump

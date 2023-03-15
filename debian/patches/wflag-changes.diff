@@ -1,8 +1,6 @@
-diff --git a/tcpdump.c b/tcpdump.c
-index 043bda1..915994b 100644
 --- a/tcpdump.c
 +++ b/tcpdump.c
-@@ -1246,8 +1246,8 @@ main(int argc, char **argv)
+@@ -1632,8 +1632,8 @@
  			if (Gflag < 0)
  				error("invalid number of seconds %s", optarg);
  
@@ -13,7 +11,7 @@ index 043bda1..915994b 100644
  
  			/* Grab the current time for rotation use. */
  			if ((Gflag_time = time(NULL)) == (time_t)-1) {
-@@ -2325,10 +2325,15 @@ dump_packet_and_trunc(u_char *user, const struct pcap_pkthdr *h, const u_char *s
+@@ -2936,10 +2936,15 @@
  				compress_savefile(dump_info->CurrentFileName);
  
  			/*
@@ -32,7 +30,7 @@ index 043bda1..915994b 100644
  				(void)fprintf(stderr, "Maximum file limit reached: %d\n",
  				    Wflag);
  				info(1);
-@@ -2341,12 +2346,6 @@ dump_packet_and_trunc(u_char *user, const struct pcap_pkthdr *h, const u_char *s
+@@ -2952,12 +2957,6 @@
  			dump_info->CurrentFileName = (char *)malloc(PATH_MAX + 1);
  			if (dump_info->CurrentFileName == NULL)
  				error("dump_packet_and_trunc: malloc");
@@ -45,7 +43,7 @@ index 043bda1..915994b 100644
  
  			/*
  			 * This is always the first file in the Cflag
-@@ -2420,11 +2419,24 @@ dump_packet_and_trunc(u_char *user, const struct pcap_pkthdr *h, const u_char *s
+@@ -3041,11 +3040,24 @@
  			if (zflag != NULL)
  				compress_savefile(dump_info->CurrentFileName);
  

@@ -1,3 +1,18 @@
+tcpdump (4.99.3-1) unstable; urgency=medium
+
+  * New upstream release.
+  * Drop Hurd build patch, which doesn't seem to be right anymore.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sat, 14 Jan 2023 18:23:25 +0100
+
+tcpdump (4.99.2-1) unstable; urgency=medium
+
+  * New upstream release.
+  * Re-enable all tests.
+  * Bump Standards-Version to 4.6.2.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sun, 01 Jan 2023 18:19:40 +0100
+
 tcpdump (4.99.1-4pexip2) pexip; urgency=medium
 
   * Merge openssl3 changes to bullseye

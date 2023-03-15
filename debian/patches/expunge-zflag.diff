@@ -1,6 +1,6 @@
 --- a/tcpdump.c
 +++ b/tcpdump.c
-@@ -226,7 +226,6 @@
+@@ -230,7 +230,6 @@
  #endif
  static int Wflag;			/* recycle output files after this number of files */
  static int WflagChars;
@@ -19,7 +19,7 @@
  		case 'Z':
  			username = optarg;
  			break;
-@@ -2535,7 +2530,7 @@
+@@ -2562,7 +2557,7 @@
  	}
  
  #ifdef HAVE_CAPSICUM
@@ -28,7 +28,7 @@
  #ifdef HAVE_CASPER
  	cansandbox = (cansandbox && (ndo->ndo_nflag || capdns != NULL));
  #else
-@@ -2796,59 +2791,6 @@
+@@ -2830,59 +2825,6 @@
  	infoprint = 0;
  }
  
@@ -88,7 +88,7 @@
  static void
  dump_packet_and_trunc(u_char *user, const struct pcap_pkthdr *h, const u_char *sp)
  {
-@@ -2896,12 +2838,6 @@
+@@ -2930,12 +2872,6 @@
  			pcap_dump_close(dump_info->pdd);
  
  			/*
@@ -101,7 +101,7 @@
  			 * If Cflag is also set, use Gflag as backstop timer.
  			 * If not using Cflag, check to see if we've exceeded the Wflag.
  			 */
-@@ -3000,13 +2936,6 @@
+@@ -3034,13 +2970,6 @@
  			pcap_dump_close(dump_info->pdd);
  
  			/*
@@ -115,7 +115,7 @@
  			 * Special case Wflag == 1 and stop without further iteration.
  			 */
  			if (Wflag == 1) {
-@@ -3233,5 +3162,5 @@
+@@ -3267,5 +3196,5 @@
  "\t\t[ --time-stamp-precision precision ] [ --micro ] [ --nano ]\n");
  #endif
  	(void)fprintf(f,

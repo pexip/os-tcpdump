@@ -9,7 +9,7 @@ Origin: https://src.fedoraproject.org/rpms/tcpdump/raw/master/f/0003-Drop-root-p
 
 --- a/tcpdump.1.in
 +++ b/tcpdump.1.in
-@@ -267,6 +267,9 @@
+@@ -269,6 +269,9 @@
  flag, with a number after it, starting at 1 and continuing upward.
  The units of \fIfile_size\fP are millions of bytes (1,000,000 bytes,
  not 1,048,576 bytes).
@@ -19,7 +19,7 @@ Origin: https://src.fedoraproject.org/rpms/tcpdump/raw/master/f/0003-Drop-root-p
  .TP
  .B \-d
  Dump the compiled packet-matching code in a human readable form to
-@@ -962,12 +965,14 @@
+@@ -966,12 +969,14 @@
  If
  .I tcpdump
  is running as root, after opening the capture device or input savefile,
