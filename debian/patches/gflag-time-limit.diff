@@ -29,10 +29,12 @@
  
  /*
   * Long options.
-@@ -1631,13 +1635,27 @@
- 			infile = optarg;
- 			break;
+@@ -1629,6 +1633,20 @@
  
+ 		case 'F':
+ 			infile = optarg;
++			break;
++
 +		case 'g':
 +			gflag = atoi(optarg);
 +			if (gflag < 1)
@@ -45,10 +47,10 @@
 +			}
 +
 +			gflag_time += gflag;
-+			break;
-+
+ 			break;
+ 
  		case 'G':
- 			Gflag = atoi(optarg);
+@@ -1636,8 +1654,8 @@
  			if (Gflag < 0)
  				error("invalid number of seconds %s", optarg);
  
@@ -66,17 +68,17 @@
 +	} else if (gflag > 0) {
 +#ifdef _WIN32
 +		CreateTimerQueueTimer(&timer_handle, NULL,
-+		    gflag_timer_fired, NULL, gflag_time * 1000, 0,
++		    gflag_timer_fired, NULL, gflag * 1000, 0,
 +		    WT_EXECUTEDEFAULT|WT_EXECUTELONGFUNCTION);
 +		setvbuf(stderr, NULL, _IONBF, 0);
 +#else /* _WIN32 */
 +		(void)setsignal(SIGALRM, gflag_timer_fired);
-+		alarm(gflag_time);
++		alarm(gflag);
 +#endif /* _WIN32 */
  	}
  
  	if (RFileName == NULL) {
-@@ -3132,17 +3160,37 @@
+@@ -3132,17 +3160,39 @@
  		pcap_dump_flush(pdd);
  }
  #endif
@@ -101,20 +103,22 @@
  		prev_packets_captured = packets_captured;
  	}
 +
-+	/* Get the current time */
-+	if ((t = time(NULL)) == (time_t)-1) {
-+		error("%s: can't get current_time: %s",
-+			__func__, pcap_strerror(errno));
-+	}
++	if (gflag > 0) {
++		/* Get the current time */
++		if ((t = time(NULL)) == (time_t)-1) {
++			error("%s: can't get current_time: %s",
++				__func__, pcap_strerror(errno));
++		}
 +
-+	/* If the time hits the expected end time, exit */
-+	if (t >= gflag_time) {
-+		gflag_time_exceeded();
++		/* If the time hits the expected end time, exit */
++		if (t >= gflag_time) {
++			gflag_time_exceeded();
++		}
 +	}
  }
  
  /*
-@@ -3161,6 +3209,22 @@
+@@ -3161,6 +3211,22 @@
  }
  #endif /* _WIN32 */
  
