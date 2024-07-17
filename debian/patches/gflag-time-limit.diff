@@ -54,8 +54,8 @@
  
 -                        /* We will create one file initially. */
 -                        Gflag_count = 0;
-+				/* We will create one file initially. */
-+				Gflag_count = 0;
++			/* We will create one file initially. */
++			Gflag_count = 0;
  
  			/* Grab the current time for rotation use. */
  			if ((Gflag_time = time(NULL)) == (time_t)-1) {
