@@ -119,7 +119,7 @@
  #endif /* _WIN32 */
  
 +/*
-+ * Called once each second if gflag is set
++ * Called if gflag is set
 + */
 +#ifdef _WIN32
 +static void CALLBACK gflag_timer_fired(PVOID param _U_,
