@@ -1,4 +1,4 @@
-tcpdump (4.99.3-1+pexip24u5) pexip-bookworm; urgency=medium
+tcpdump (4.99.3-1+pexip24u5) pexip; urgency=medium
 
   * New gflag for time limit on capture.
 
