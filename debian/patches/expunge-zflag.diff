@@ -8,7 +8,7 @@
  static int timeout = 1000;		/* default timeout = 1000 ms = 1 s */
  #ifdef HAVE_PCAP_SET_IMMEDIATE_MODE
  static int immediate_mode;
-@@ -1872,10 +1871,6 @@
+@@ -1876,10 +1875,6 @@
  			}
  			break;
  #endif
@@ -19,7 +19,7 @@
  		case 'Z':
  			username = optarg;
  			break;
-@@ -2562,7 +2557,7 @@
+@@ -2537,7 +2532,7 @@
  	}
  
  #ifdef HAVE_CAPSICUM
@@ -28,7 +28,7 @@
  #ifdef HAVE_CASPER
  	cansandbox = (cansandbox && (ndo->ndo_nflag || capdns != NULL));
  #else
-@@ -2830,59 +2825,6 @@
+@@ -2805,60 +2800,7 @@
  	infoprint = 0;
  }
  
@@ -38,7 +38,7 @@
 -#else
 -#define fork_subprocess() vfork()
 -#endif
--static void
+ static void
 -compress_savefile(const char *filename)
 -{
 -	pid_t child;
@@ -85,37 +85,38 @@
 -}
 -#endif /* HAVE_FORK && HAVE_VFORK */
 -
- static void
+-static void
  dump_packet_and_trunc(u_char *user, const struct pcap_pkthdr *h, const u_char *sp)
  {
-@@ -2930,12 +2872,6 @@
+ 	struct dump_info *dump_info;
+@@ -2903,12 +2845,6 @@
+ 			 * Close the current file and open a new one.
+ 			 */
  			pcap_dump_close(dump_info->pdd);
- 
- 			/*
+-
+-			/*
 -			 * Compress the file we just closed, if the user asked for it
 -			 */
 -			if (zflag != NULL)
 -				compress_savefile(dump_info->CurrentFileName);
--
--			/*
- 			 * If Cflag is also set, use Gflag as backstop timer.
- 			 * If not using Cflag, check to see if we've exceeded the Wflag.
- 			 */
-@@ -3034,13 +2970,6 @@
- 			pcap_dump_close(dump_info->pdd);
  
  			/*
+ 			 * Check to see if we've exceeded the Wflag (when
+@@ -3009,13 +2945,6 @@
+ 			 */
+ 			pcap_dump_close(dump_info->pdd);
+ 
+-			/*
 -			 * Compress the file we just closed, if the user
 -			 * asked for it.
 -			 */
 -			if (zflag != NULL)
 -				compress_savefile(dump_info->CurrentFileName);
 -
--			/*
- 			 * Special case Wflag == 1 and stop without further iteration.
- 			 */
- 			if (Wflag == 1) {
-@@ -3267,5 +3196,5 @@
+ 			Cflag_count++;
+ 			if (Wflag > 0) {
+ 				if (Cflag_count >= Wflag)
+@@ -3230,5 +3159,5 @@
  "\t\t[ --time-stamp-precision precision ] [ --micro ] [ --nano ]\n");
  #endif
  	(void)fprintf(f,

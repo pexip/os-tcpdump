@@ -1,0 +1,108 @@
+--- a/tcpdump.c
++++ b/tcpdump.c
+@@ -211,6 +211,8 @@
+  */
+ extern int dflag;
+ int dflag;				/* print filter code */
++static int gflag;			/* exit after this many seconds */
++static time_t gflag_time;		/* time_t to exit at */
+ static int Gflag;			/* rotate dump files after this many seconds */
+ static int Gflag_count;			/* number of files created with Gflag rotation */
+ static time_t Gflag_time;		/* The last time_t the dump file was rotated. */
+@@ -228,6 +230,7 @@
+ #ifdef HAVE_PCAP_DUMP_FLUSH
+ static int Uflag;			/* "unbuffered" output of dump files */
+ #endif
++static int vflag_print;		/* indicates if verbose stats should be dumped */
+ static int Wflag;			/* recycle output files after this number of files */
+ static int WflagChars;
+ static int timeout = 1000;		/* default timeout = 1000 ms = 1 s */
+@@ -671,7 +674,7 @@
+ #define U_FLAG
+ #endif
+ 
+-#define SHORTOPTS "aAb" B_FLAG "c:C:d" D_FLAG "eE:fF:G:hHi:" I_FLAG j_FLAG J_FLAG "KlLm:M:nNOpq" Q_FLAG "r:s:StT:u" U_FLAG "vV:w:W:xXy:Yz:Z:#"
++#define SHORTOPTS "aAb" B_FLAG "c:C:d" D_FLAG "eE:fF:g:G:hHi:" I_FLAG j_FLAG J_FLAG "KlLm:M:nNOpq" Q_FLAG "r:s:StT:u" U_FLAG "vV:w:W:xXy:Yz:Z:#"
+ 
+ /*
+  * Long options.
+@@ -1630,13 +1633,27 @@
+ 			infile = optarg;
+ 			break;
+ 
++		case 'g':
++			gflag = atoi(optarg);
++			if (gflag < 1)
++				error("invalid number of seconds %s", optarg);
++
++			/* Grab the current time for time limit. */
++			if ((gflag_time = time(NULL)) == (time_t)-1) {
++				error("%s: can't get current time: %s",
++				    __func__, pcap_strerror(errno));
++			}
++
++			gflag_time += gflag;
++			break;
++
+ 		case 'G':
+ 			Gflag = atoi(optarg);
+ 			if (Gflag < 0)
+ 				error("invalid number of seconds %s", optarg);
+ 
+-                        /* We will create one file initially. */
+-                        Gflag_count = 0;
++			/* We will create one file initially. */
++			Gflag_count = 0;
+ 
+ 			/* Grab the current time for rotation use. */
+ 			if ((Gflag_time = time(NULL)) == (time_t)-1) {
+@@ -2469,7 +2486,9 @@
+ 	(void)setsignal(SIGNAL_FLUSH_PCAP, flushpcap);
+ #endif
+ 
+-	if (ndo->ndo_vflag > 0 && WFileName && RFileName == NULL && !print) {
++	vflag_print = ndo->ndo_vflag > 0 && WFileName && RFileName == NULL && !print;
++
++	if (gflag > 0 || vflag_print) {
+ 		/*
+ 		 * When capturing to a file, if "--print" wasn't specified,
+ 		 *"-v" means tcpdump should, once per second,
+@@ -2477,6 +2496,8 @@
+ 		 * Except when reading from a file, because -r, -w and -v
+ 		 * together used to make a corner case, in which pcap_loop()
+ 		 * errored due to EINTR (see GH #155 for details).
++		 *
++		 * Also, set up this timer if the gflag is set.
+ 		 */
+ #ifdef _WIN32
+ 		/*
+@@ -3066,12 +3087,28 @@
+ print_packets_captured (void)
+ {
+ 	static u_int prev_packets_captured, first = 1;
++	time_t t;
+ 
+-	if (infodelay == 0 && (first || packets_captured != prev_packets_captured)) {
++	if (vflag_print && infodelay == 0 && (first || packets_captured != prev_packets_captured)) {
+ 		fprintf(stderr, "Got %u\r", packets_captured);
+ 		first = 0;
+ 		prev_packets_captured = packets_captured;
+ 	}
++
++	if (gflag > 0) {
++		/* Get the current time */
++		if ((t = time(NULL)) == (time_t)-1) {
++			error("%s: can't get current_time: %s",
++				__func__, pcap_strerror(errno));
++		}
++
++		/* If the time hits the expected end time, exit */
++		if (t >= gflag_time) {
++			(void)fprintf(stderr, "Time limit reached: %d seconds\n", gflag);
++			info(1);
++			exit_tcpdump(0);
++		}
++	}
+ }
+ 
+ /*

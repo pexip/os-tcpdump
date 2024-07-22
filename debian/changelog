@@ -1,3 +1,9 @@
+tcpdump (4.99.3-1+pexip24u5) pexip; urgency=medium
+
+  * New gflag for time limit on capture.
+
+ -- Alan Ford <alan@pexip.com>  Tue, 16 Jul 2024 16:35:11 +0100
+
 tcpdump (4.99.3-1+pexip24u4) pexip-bookworm; urgency=medium
 
   * New versioning scheme
