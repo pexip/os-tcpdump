@@ -9,18 +9,15 @@
  static int Gflag;			/* rotate dump files after this many seconds */
  static int Gflag_count;			/* number of files created with Gflag rotation */
  static time_t Gflag_time;		/* The last time_t the dump file was rotated. */
-@@ -278,8 +280,10 @@
- #ifdef _WIN32
-     static HANDLE timer_handle = INVALID_HANDLE_VALUE;
-     static void CALLBACK verbose_stats_dump(PVOID param, BOOLEAN timer_fired);
-+    static void CALLBACK gflag_timer_fired(PVOID param, BOOLEAN timer_fired);
- #else /* _WIN32 */
-   static void verbose_stats_dump(int sig);
-+  static void gflag_timer_fired(int sig);
- #endif /* _WIN32 */
- 
- static void info(int);
-@@ -672,7 +676,7 @@
+@@ -228,6 +230,7 @@
+ #ifdef HAVE_PCAP_DUMP_FLUSH
+ static int Uflag;			/* "unbuffered" output of dump files */
+ #endif
++static int vflag_print;     /* indicates if verbose stats should be dumped */
+ static int Wflag;			/* recycle output files after this number of files */
+ static int WflagChars;
+ static int timeout = 1000;		/* default timeout = 1000 ms = 1 s */
+@@ -671,7 +674,7 @@
  #define U_FLAG
  #endif
  
@@ -29,12 +26,10 @@
  
  /*
   * Long options.
-@@ -1629,6 +1633,20 @@
- 
- 		case 'F':
+@@ -1630,13 +1633,27 @@
  			infile = optarg;
-+			break;
-+
+ 			break;
+ 
 +		case 'g':
 +			gflag = atoi(optarg);
 +			if (gflag < 1)
@@ -47,10 +42,10 @@
 +			}
 +
 +			gflag_time += gflag;
- 			break;
- 
++			break;
++
  		case 'G':
-@@ -1636,8 +1654,8 @@
+ 			Gflag = atoi(optarg);
  			if (Gflag < 0)
  				error("invalid number of seconds %s", optarg);
  
@@ -61,43 +56,34 @@
  
  			/* Grab the current time for rotation use. */
  			if ((Gflag_time = time(NULL)) == (time_t)-1) {
-@@ -2509,6 +2527,16 @@
- 		timer.it_value.tv_usec = 1;
- 		setitimer(ITIMER_REAL, &timer, NULL);
- #endif /* _WIN32 */
-+	} else if (gflag > 0) {
-+#ifdef _WIN32
-+		CreateTimerQueueTimer(&timer_handle, NULL,
-+		    gflag_timer_fired, NULL, gflag * 1000, 0,
-+		    WT_EXECUTEDEFAULT|WT_EXECUTELONGFUNCTION);
-+		setvbuf(stderr, NULL, _IONBF, 0);
-+#else /* _WIN32 */
-+		(void)setsignal(SIGALRM, gflag_timer_fired);
-+		alarm(gflag);
-+#endif /* _WIN32 */
- 	}
- 
- 	if (RFileName == NULL) {
-@@ -3132,17 +3160,39 @@
- 		pcap_dump_flush(pdd);
- }
+@@ -2469,7 +2486,9 @@
+ 	(void)setsignal(SIGNAL_FLUSH_PCAP, flushpcap);
  #endif
-+
-+static void
-+gflag_time_exceeded(void)
-+{
-+	(void)fprintf(stderr, "Time limit reached: %d seconds\n", gflag);
-+	info(1);
-+	exit_tcpdump(0);
-+}
  
- static void
+-	if (ndo->ndo_vflag > 0 && WFileName && RFileName == NULL && !print) {
++	vflag_print = ndo->ndo_vflag > 0 && WFileName && RFileName == NULL && !print;
++
++	if (gflag > 0 || vflag_print) {
+ 		/*
+ 		 * When capturing to a file, if "--print" wasn't specified,
+ 		 *"-v" means tcpdump should, once per second,
+@@ -2477,6 +2496,8 @@
+ 		 * Except when reading from a file, because -r, -w and -v
+ 		 * together used to make a corner case, in which pcap_loop()
+ 		 * errored due to EINTR (see GH #155 for details).
++         *
++         * Also, set up this timer if the gflag is set.
+ 		 */
+ #ifdef _WIN32
+ 		/*
+@@ -3066,12 +3087,28 @@
  print_packets_captured (void)
  {
  	static u_int prev_packets_captured, first = 1;
 +	time_t t;
  
- 	if (infodelay == 0 && (first || packets_captured != prev_packets_captured)) {
+-	if (infodelay == 0 && (first || packets_captured != prev_packets_captured)) {
++	if (vflag_print && infodelay == 0 && (first || packets_captured != prev_packets_captured)) {
  		fprintf(stderr, "Got %u\r", packets_captured);
  		first = 0;
  		prev_packets_captured = packets_captured;
@@ -112,32 +98,11 @@
 +
 +		/* If the time hits the expected end time, exit */
 +		if (t >= gflag_time) {
-+			gflag_time_exceeded();
++            (void)fprintf(stderr, "Time limit reached: %d seconds\n", gflag);
++            info(1);
++            exit_tcpdump(0);
 +		}
 +	}
  }
  
  /*
-@@ -3161,6 +3211,22 @@
- }
- #endif /* _WIN32 */
- 
-+/*
-+ * Called if gflag is set
-+ */
-+#ifdef _WIN32
-+static void CALLBACK gflag_timer_fired(PVOID param _U_,
-+    BOOLEAN timer_fired _U_)
-+{
-+	gflag_time_exceeded();
-+}
-+#else /* _WIN32 */
-+static void gflag_timer_fired(int sig _U_)
-+{
-+	gflag_time_exceeded();
-+}
-+#endif /* _WIN32 */
-+
- DIAG_OFF_DEPRECATION
- static void
- print_version(FILE *f)
