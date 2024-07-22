@@ -13,7 +13,7 @@
  #ifdef HAVE_PCAP_DUMP_FLUSH
  static int Uflag;			/* "unbuffered" output of dump files */
  #endif
-+static int vflag_print;     /* indicates if verbose stats should be dumped */
++static int vflag_print;		/* indicates if verbose stats should be dumped */
  static int Wflag;			/* recycle output files after this number of files */
  static int WflagChars;
  static int timeout = 1000;		/* default timeout = 1000 ms = 1 s */
@@ -71,8 +71,8 @@
  		 * Except when reading from a file, because -r, -w and -v
  		 * together used to make a corner case, in which pcap_loop()
  		 * errored due to EINTR (see GH #155 for details).
-+         *
-+         * Also, set up this timer if the gflag is set.
++		 *
++		 * Also, set up this timer if the gflag is set.
  		 */
  #ifdef _WIN32
  		/*
@@ -98,9 +98,9 @@
 +
 +		/* If the time hits the expected end time, exit */
 +		if (t >= gflag_time) {
-+            (void)fprintf(stderr, "Time limit reached: %d seconds\n", gflag);
-+            info(1);
-+            exit_tcpdump(0);
++			(void)fprintf(stderr, "Time limit reached: %d seconds\n", gflag);
++			info(1);
++			exit_tcpdump(0);
 +		}
 +	}
  }
