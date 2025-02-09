@@ -1,4 +1,6 @@
-#!/bin/sh -e
+#!/bin/sh
+
+set -e
 
 if ! getent group tcpdump >/dev/null 2>&1; then
     addgroup --system --quiet tcpdump

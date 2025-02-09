@@ -1,3 +1,56 @@
+tcpdump (4.99.5-2) unstable; urgency=medium
+
+  * Transfer ownership to pkg-security team.
+  * Set Vcs-* fields to new locations in Debian group.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sun, 09 Feb 2025 12:03:02 +0100
+
+tcpdump (4.99.5-1) unstable; urgency=low
+
+  * New upstream release.
+  * Drop upstream patch related to #1035842, now included.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sun, 01 Sep 2024 12:49:43 +0200
+
+tcpdump (4.99.4-5) unstable; urgency=medium
+
+  * Avoid getpwnam(NULL) when called with `-Z root', thanks to Rodney
+    Dawes <dobey@ubuntu.com> for the report and patch (closes: #1078771).
+
+ -- Romain Francoise <rfrancoise@debian.org>  Fri, 23 Aug 2024 18:53:46 +0200
+
+tcpdump (4.99.4-4) unstable; urgency=medium
+
+  * debian/watch: switch to .tar.xz URLs as upstream homepage no longer
+    lists the .tar.gz.
+  * Mark latest patch as "Forwarded: not-needed".
+  * Bump Standards-Version to 4.7.0.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sun, 28 Apr 2024 17:07:15 +0200
+
+tcpdump (4.99.4-3) unstable; urgency=medium
+
+  * Allow *.pcapng in AppArmor policy, thanks to Chris Kuethe for the
+    patch (closes: #1039993).
+  * Pick up patch from upstream PR#812 to avoid the call to droproot()
+    altogether if called with `-Z root', thanks to Tj (closes: #1035842).
+  * Override 'spelling-error-in-binary' and move 'set -e' inside maintscripts.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sat, 22 Jul 2023 17:23:56 +0200
+
+tcpdump (4.99.4-2) unstable; urgency=medium
+
+  * Upload to unstable.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sat, 17 Jun 2023 17:29:12 +0200
+
+tcpdump (4.99.4-1) experimental; urgency=medium
+
+  * New upstream release.
+  * Mark Debian-specific patches as "Forwarded: not-needed" in metadata.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Mon, 10 Apr 2023 16:57:18 +0200
+
 tcpdump (4.99.3-1) unstable; urgency=medium
 
   * New upstream release.

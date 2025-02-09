@@ -1,5 +1,5 @@
 Description: Drop root privileges after opening savefile
-Forwarded: no
+Forwarded: not-needed
 Bug-Debian: https://bugs.debian.org/935112
 Origin: https://src.fedoraproject.org/rpms/tcpdump/raw/master/f/0003-Drop-root-priviledges-before-opening-first-savefile-.patch
 ---
@@ -9,7 +9,7 @@ Origin: https://src.fedoraproject.org/rpms/tcpdump/raw/master/f/0003-Drop-root-p
 
 --- a/tcpdump.1.in
 +++ b/tcpdump.1.in
-@@ -269,6 +269,9 @@
+@@ -268,6 +268,9 @@
  flag, with a number after it, starting at 1 and continuing upward.
  The units of \fIfile_size\fP are millions of bytes (1,000,000 bytes,
  not 1,048,576 bytes).
@@ -19,7 +19,7 @@ Origin: https://src.fedoraproject.org/rpms/tcpdump/raw/master/f/0003-Drop-root-p
  .TP
  .B \-d
  Dump the compiled packet-matching code in a human readable form to
-@@ -966,12 +969,14 @@
+@@ -965,12 +968,14 @@
  If
  .I tcpdump
  is running as root, after opening the capture device or input savefile,
@@ -38,7 +38,7 @@ Origin: https://src.fedoraproject.org/rpms/tcpdump/raw/master/f/0003-Drop-root-p
  selects which packets will be dumped.
 --- a/tcpdump.c
 +++ b/tcpdump.c
-@@ -1492,6 +1492,7 @@
+@@ -1511,6 +1511,7 @@
  	cap_rights_t rights;
  	int cansandbox;
  #endif	/* HAVE_CAPSICUM */
@@ -46,7 +46,7 @@ Origin: https://src.fedoraproject.org/rpms/tcpdump/raw/master/f/0003-Drop-root-p
  	int Oflag = 1;			/* run filter code optimizer */
  	int yflag_dlt = -1;
  	const char *yflag_dlt_name = NULL;
-@@ -2320,6 +2321,19 @@
+@@ -2372,6 +2373,19 @@
  		}
  		capng_apply(CAPNG_SELECT_BOTH);
  #endif /* HAVE_LIBCAP_NG */
@@ -66,13 +66,13 @@ Origin: https://src.fedoraproject.org/rpms/tcpdump/raw/master/f/0003-Drop-root-p
  		if (username || chroot_dir)
  			droproot(username, chroot_dir);
  
-@@ -2377,6 +2391,22 @@
+@@ -2429,6 +2443,22 @@
  #endif /* HAVE_LIBCAP_NG */
  		if (pdd == NULL)
  			error("%s", pcap_geterr(pd));
 +
 +		/* Change ownership of file and drop root privileges */
-+		if (chown_flag) {
++		if (chown_flag && username) {
 +			struct passwd *pwd;
 +
 +			pwd = getpwnam(username);

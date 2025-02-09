@@ -1,4 +1,6 @@
-Change man page section.
+Description: Change man page section
+Forwarded: not-needed
+Author: Romain Francoise <rfrancoise@debian.org>
 
 --- a/tcpdump.1.in
 +++ b/tcpdump.1.in
@@ -6,8 +8,8 @@ Change man page section.
  .\" WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF
  .\" MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
  .\"
--.TH TCPDUMP 1  "30 July 2022"
-+.TH TCPDUMP 8  "30 July 2022"
+-.TH TCPDUMP 1  "26 March 2024"
++.TH TCPDUMP 8  "26 March 2024"
  .SH NAME
  tcpdump \- dump traffic on a network
  .SH SYNOPSIS
