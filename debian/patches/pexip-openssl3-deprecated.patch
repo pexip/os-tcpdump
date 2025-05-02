@@ -1,0 +1,197 @@
+Index: tcpdump/print-tcp.c
+===================================================================
+--- tcpdump.orig/print-tcp.c
++++ tcpdump/print-tcp.c
+@@ -52,7 +52,7 @@ __RCSID("$NetBSD: print-tcp.c,v 1.8 2007
+ #include "rpc_msg.h"
+ 
+ #ifdef HAVE_LIBCRYPTO
+-#include <openssl/md5.h>
++#include <openssl/evp.h>
+ #include "signature.h"
+ 
+ static int tcp_verify_signature(netdissect_options *ndo,
+@@ -903,14 +903,30 @@ tcp_verify_signature(netdissect_options
+         struct tcphdr tp1;
+         u_char sig[TCP_SIGLEN];
+         char zero_proto = 0;
+-        MD5_CTX ctx;
++        OSSL_LIB_CTX *libctx = NULL;
++        EVP_MD *evp_md5 = NULL;
++        EVP_MD_CTX *ctx = NULL;
+         uint16_t savecsum, tlen;
+         const struct ip6_hdr *ip6;
+         uint32_t len32;
+         uint8_t nxt;
+ 
++        libctx = OSSL_LIB_CTX_new();
++        evp_md5 = EVP_MD_fetch(libctx, "MD5", NULL);
++        if (!evp_md5) {
++                ND_PRINT("could not initialise md5 module, ");
++                return (CANT_CHECK_SIGNATURE);
++        }
++
++        ctx = EVP_MD_CTX_new();
++        if (!ctx) {
++                ND_PRINT("could not initialise md5 context, ");
++                return (CANT_CHECK_SIGNATURE);
++        }
++
+         if (data + length > ndo->ndo_snapend) {
+                 ND_PRINT("snaplen too short, ");
++                EVP_MD_CTX_free(ctx);
+                 return (CANT_CHECK_SIGNATURE);
+         }
+ 
+@@ -918,35 +934,37 @@ tcp_verify_signature(netdissect_options
+ 
+         if (ndo->ndo_sigsecret == NULL) {
+                 ND_PRINT("shared secret not supplied with -M, ");
++                EVP_MD_CTX_free(ctx);
+                 return (CANT_CHECK_SIGNATURE);
+         }
+ 
+-        MD5_Init(&ctx);
++        EVP_DigestInit_ex(ctx, evp_md5, NULL);
+         /*
+          * Step 1: Update MD5 hash with IP pseudo-header.
+          */
+         if (IP_V(ip) == 4) {
+-                MD5_Update(&ctx, (const char *)&ip->ip_src, sizeof(ip->ip_src));
+-                MD5_Update(&ctx, (const char *)&ip->ip_dst, sizeof(ip->ip_dst));
+-                MD5_Update(&ctx, (const char *)&zero_proto, sizeof(zero_proto));
+-                MD5_Update(&ctx, (const char *)&ip->ip_p, sizeof(ip->ip_p));
++                EVP_DigestUpdate(ctx, (const char *)&ip->ip_src, sizeof(ip->ip_src));
++                EVP_DigestUpdate(ctx, (const char *)&ip->ip_dst, sizeof(ip->ip_dst));
++                EVP_DigestUpdate(ctx, (const char *)&zero_proto, sizeof(zero_proto));
++                EVP_DigestUpdate(ctx, (const char *)&ip->ip_p, sizeof(ip->ip_p));
+                 tlen = GET_BE_U_2(ip->ip_len) - IP_HL(ip) * 4;
+                 tlen = htons(tlen);
+-                MD5_Update(&ctx, (const char *)&tlen, sizeof(tlen));
++                EVP_DigestUpdate(ctx, (const char *)&tlen, sizeof(tlen));
+         } else if (IP_V(ip) == 6) {
+                 ip6 = (const struct ip6_hdr *)ip;
+-                MD5_Update(&ctx, (const char *)&ip6->ip6_src, sizeof(ip6->ip6_src));
+-                MD5_Update(&ctx, (const char *)&ip6->ip6_dst, sizeof(ip6->ip6_dst));
++                EVP_DigestUpdate(ctx, (const char *)&ip6->ip6_src, sizeof(ip6->ip6_src));
++                EVP_DigestUpdate(ctx, (const char *)&ip6->ip6_dst, sizeof(ip6->ip6_dst));
+                 len32 = htonl(GET_BE_U_2(ip6->ip6_plen));
+-                MD5_Update(&ctx, (const char *)&len32, sizeof(len32));
++                EVP_DigestUpdate(ctx, (const char *)&len32, sizeof(len32));
+                 nxt = 0;
+-                MD5_Update(&ctx, (const char *)&nxt, sizeof(nxt));
+-                MD5_Update(&ctx, (const char *)&nxt, sizeof(nxt));
+-                MD5_Update(&ctx, (const char *)&nxt, sizeof(nxt));
++                EVP_DigestUpdate(ctx, (const char *)&nxt, sizeof(nxt));
++                EVP_DigestUpdate(ctx, (const char *)&nxt, sizeof(nxt));
++                EVP_DigestUpdate(ctx, (const char *)&nxt, sizeof(nxt));
+                 nxt = IPPROTO_TCP;
+-                MD5_Update(&ctx, (const char *)&nxt, sizeof(nxt));
++                EVP_DigestUpdate(ctx, (const char *)&nxt, sizeof(nxt));
+         } else {
+                 ND_PRINT("IP version not 4 or 6, ");
++                EVP_MD_CTX_free(ctx);
+                 return (CANT_CHECK_SIGNATURE);
+         }
+ 
+@@ -956,18 +974,20 @@ tcp_verify_signature(netdissect_options
+          */
+         memcpy(&savecsum, tp1.th_sum, sizeof(savecsum));
+         memset(tp1.th_sum, 0, sizeof(tp1.th_sum));
+-        MD5_Update(&ctx, (const char *)&tp1, sizeof(struct tcphdr));
++        EVP_DigestUpdate(ctx, (const char *)&tp1, sizeof(struct tcphdr));
+         memcpy(tp1.th_sum, &savecsum, sizeof(tp1.th_sum));
+         /*
+          * Step 3: Update MD5 hash with TCP segment data, if present.
+          */
+         if (length > 0)
+-                MD5_Update(&ctx, data, length);
++                EVP_DigestUpdate(ctx, data, length);
+         /*
+          * Step 4: Update MD5 hash with shared secret.
+          */
+-        MD5_Update(&ctx, ndo->ndo_sigsecret, strlen(ndo->ndo_sigsecret));
+-        MD5_Final(sig, &ctx);
++        EVP_DigestUpdate(ctx, ndo->ndo_sigsecret, strlen(ndo->ndo_sigsecret));
++        EVP_DigestFinal_ex(ctx, sig, NULL);
++
++        EVP_MD_CTX_free(ctx);
+ 
+         if (memcmp(rcvsig, sig, TCP_SIGLEN) == 0)
+                 return (SIGNATURE_VALID);
+Index: tcpdump/signature.c
+===================================================================
+--- tcpdump.orig/signature.c
++++ tcpdump/signature.c
+@@ -27,7 +27,7 @@
+ #include "diag-control.h"
+ 
+ #ifdef HAVE_LIBCRYPTO
+-#include <openssl/md5.h>
++#include <openssl/evp.h>
+ #endif
+ 
+ const struct tok signature_check_values[] = {
+@@ -49,20 +49,27 @@ static void
+ signature_compute_hmac_md5(const uint8_t *text, int text_len, unsigned char *key,
+                            unsigned int key_len, uint8_t *digest)
+ {
+-    MD5_CTX context;
++    OSSL_LIB_CTX *libctx = NULL;
++    EVP_MD *evp_md5 = NULL;
++    EVP_MD_CTX *context = NULL;
+     unsigned char k_ipad[65];    /* inner padding - key XORd with ipad */
+     unsigned char k_opad[65];    /* outer padding - key XORd with opad */
+     unsigned char tk[16];
+     int i;
+ 
++    libctx = OSSL_LIB_CTX_new();
++    evp_md5 = EVP_MD_fetch(libctx, "MD5", NULL);
++    context = EVP_MD_CTX_new();
++
+     /* if key is longer than 64 bytes reset it to key=MD5(key) */
+     if (key_len > 64) {
+ 
+-        MD5_CTX tctx;
++        EVP_MD_CTX *tctx = EVP_MD_CTX_new();
+ 
+-        MD5_Init(&tctx);
+-        MD5_Update(&tctx, key, key_len);
+-        MD5_Final(tk, &tctx);
++        EVP_DigestInit_ex(tctx, evp_md5, NULL);
++        EVP_DigestUpdate(tctx, key, key_len);
++        EVP_DigestFinal_ex(tctx, tk, NULL);
++        EVP_MD_CTX_free(tctx);
+ 
+         key = tk;
+         key_len = 16;
+@@ -94,18 +101,21 @@ signature_compute_hmac_md5(const uint8_t
+     /*
+      * perform inner MD5
+      */
+-    MD5_Init(&context);                   /* init context for 1st pass */
+-    MD5_Update(&context, k_ipad, 64);     /* start with inner pad */
+-    MD5_Update(&context, text, text_len); /* then text of datagram */
+-    MD5_Final(digest, &context);          /* finish up 1st pass */
++    EVP_DigestInit_ex(context, evp_md5, NULL); /* init context for 1st pass */
++    EVP_DigestUpdate(context, k_ipad, 64);     /* start with inner pad */
++    EVP_DigestUpdate(context, text, text_len); /* then text of datagram */
++    EVP_DigestFinal_ex(context, digest, NULL); /* finish up 1st pass */
+ 
+     /*
+      * perform outer MD5
+      */
+-    MD5_Init(&context);                   /* init context for 2nd pass */
+-    MD5_Update(&context, k_opad, 64);     /* start with outer pad */
+-    MD5_Update(&context, digest, 16);     /* then results of 1st hash */
+-    MD5_Final(digest, &context);          /* finish up 2nd pass */
++    EVP_DigestInit_ex(context, evp_md5, NULL); /* init context for 2nd pass */
++    EVP_DigestUpdate(context, k_opad, 64);     /* start with outer pad */
++    EVP_DigestUpdate(context, digest, 16);     /* then results of 1st hash */
++    EVP_DigestFinal_ex(context, digest, NULL); /* finish up 2nd pass */
++
++    EVP_MD_CTX_free(context);
++
+ }
+ DIAG_ON_DEPRECATION
+ 
