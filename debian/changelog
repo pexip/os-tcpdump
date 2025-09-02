@@ -1,3 +1,9 @@
+tcpdump (4.99.5-2+pexip25u2) pexip; urgency=medium
+
+  * Restore Wflag special casing.
+
+ -- Alan Ford <alan@pexip.com>  Tue,  2 Sep 2025 20:28:12 +0100
+
 tcpdump (4.99.5-2+pexip25u1) pexip-trixie; urgency=medium
 
   * Initial trixie build
@@ -56,6 +62,13 @@ tcpdump (4.99.4-1) experimental; urgency=medium
   * Mark Debian-specific patches as "Forwarded: not-needed" in metadata.
 
  -- Romain Francoise <rfrancoise@debian.org>  Mon, 10 Apr 2023 16:57:18 +0200
+=======
+tcpdump (4.99.3-1+pexip24u6) pexip; urgency=medium
+
+  * Restore Wflag special casing.
+
+ -- Alan Ford <alan@pexip.com>  Tue,  2 Sep 2025 20:28:12 +0100
+>>>>>>> 45cd805 (Adjust Wflag behaviour to stop after one file when set to 1.)
 
 tcpdump (4.99.3-1+pexip24u5) pexip; urgency=medium
 

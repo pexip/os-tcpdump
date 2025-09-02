@@ -26,10 +26,12 @@
  
  /*
   * Long options.
-@@ -1630,13 +1633,27 @@
- 			infile = optarg;
- 			break;
+@@ -1624,6 +1627,20 @@
  
+ 		case 'F':
+ 			infile = optarg;
++			break;
++
 +		case 'g':
 +			gflag = atoi(optarg);
 +			if (gflag < 1)
@@ -42,10 +44,10 @@
 +			}
 +
 +			gflag_time += gflag;
-+			break;
-+
+ 			break;
+ 
  		case 'G':
- 			Gflag = atoi(optarg);
+@@ -1631,8 +1648,8 @@
  			if (Gflag < 0)
  				error("invalid number of seconds %s", optarg);
  
@@ -56,7 +58,7 @@
  
  			/* Grab the current time for rotation use. */
  			if ((Gflag_time = time(NULL)) == (time_t)-1) {
-@@ -2469,7 +2486,9 @@
+@@ -2494,7 +2511,9 @@
  	(void)setsignal(SIGNAL_FLUSH_PCAP, flushpcap);
  #endif
  
@@ -67,7 +69,7 @@
  		/*
  		 * When capturing to a file, if "--print" wasn't specified,
  		 *"-v" means tcpdump should, once per second,
-@@ -2477,6 +2496,8 @@
+@@ -2502,6 +2521,8 @@
  		 * Except when reading from a file, because -r, -w and -v
  		 * together used to make a corner case, in which pcap_loop()
  		 * errored due to EINTR (see GH #155 for details).
@@ -76,7 +78,33 @@
  		 */
  #ifdef _WIN32
  		/*
-@@ -3066,12 +3087,28 @@
+@@ -2969,12 +2990,25 @@
+ 			 * Close the current file and open a new one.
+ 			 */
+ 			pcap_dump_close(dump_info->pdd);
++
++			/*
++			 * Special case Wflag == 1 and stop without further iteration.
++			 */
++			if (Wflag == 1) {
++				(void)fprintf(stderr, "Capture size limit reached\n");
++				info(1);
++				exit_tcpdump(0);
++			}
+ 
++			/*
++			 * Increment the count. If count exceeds Wflag, start again.
++			 */
+ 			Cflag_count++;
+ 			if (Wflag > 0) {
+ 				if (Cflag_count >= Wflag)
+ 					Cflag_count = 0;
+ 			}
++
+ 			if (dump_info->CurrentFileName != NULL)
+ 				free(dump_info->CurrentFileName);
+ 			dump_info->CurrentFileName = (char *)malloc(PATH_MAX + 1);
+@@ -3091,12 +3125,28 @@
  print_packets_captured (void)
  {
  	static u_int prev_packets_captured, first = 1;
