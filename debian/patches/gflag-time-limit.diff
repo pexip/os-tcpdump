@@ -1,3 +1,8 @@
+Improve timeout handling when running packet captures
+
+Don't wait for the next packet received to trigger the end of a
+time-limited capture, use an alarm instead.
+
 --- a/tcpdump.c
 +++ b/tcpdump.c
 @@ -211,6 +211,8 @@

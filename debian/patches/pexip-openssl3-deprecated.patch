@@ -1,3 +1,5 @@
+Build without using functions deprecated in openssl 3
+
 Index: tcpdump/print-tcp.c
 ===================================================================
 --- tcpdump.orig/print-tcp.c

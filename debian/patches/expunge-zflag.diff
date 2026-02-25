@@ -1,3 +1,6 @@
+Security: don't allow for user-specified command execution for
+compression
+
 --- a/tcpdump.c
 +++ b/tcpdump.c
 @@ -230,7 +230,6 @@
